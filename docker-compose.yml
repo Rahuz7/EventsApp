@@ -11,5 +11,18 @@ services:
     networks:
       - backend
 
+  front:
+    build: ./frontend
+    container_name: react-front
+    volumes:
+      - ./frontend/cypress/videos:/usr/src/app/cypress/videos
+    ports:
+      - "8000:8000"
+    command: npm start
+    networks:
+      - backend
+
 networks:
   backend:
+    driver: bridge
+    name: backend
