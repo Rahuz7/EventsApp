@@ -11,5 +11,25 @@ services:
     networks:
       - backend
 
+  payment:
+    build:
+      context: payment-service/
+      dockerfile: Dockerfile
+    volumes:
+      - ./payment-service:/app
+    depends_on:
+      - rabbitmq
+    networks:
+      - backend
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - backend
+
 networks:
   backend:
