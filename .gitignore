@@ -1,6 +1,6 @@
-server/node_modules
-server/package-lock.json
-client/node_modules
-client/package-lock.json
+entrypoint/node_modules
+entrypoint/package-lock.json
+frontend/node_modules
+frontend/package-lock.json
 email-service/node_modules
 email-service/package-lock.json
