@@ -11,14 +11,23 @@ services:
     networks:
       - backend
 
-  front:
-    build: ./frontend
-    container_name: react-front
+  payment:
+    build:
+      context: payment-service/
+      dockerfile: Dockerfile
     volumes:
-      - ./frontend/cypress/videos:/usr/src/app/cypress/videos
+      - ./payment-service:/app
+    depends_on:
+      - rabbitmq
+    networks:
+      - backend
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    restart: always
     ports:
-      - "8000:8000"
-    command: npm start
+      - "5672:5672"
+      - "15672:15672"
     networks:
       - backend
 
