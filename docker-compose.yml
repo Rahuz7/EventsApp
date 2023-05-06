@@ -1,35 +1,126 @@
 version: '3'
 
 services:
-  mysql:
-    image: mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    restart: always
     ports:
-      - "9000:3306"
+      - "9000:80"
     environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD: FALSE
-      MYSQL_RANDOM_ROOT_PASSWORD: TRUE
+      PMA_HOST: databases
+      MYSQL_ROOT_PASSWORD: databases
+    networks:
+      - backend
+
+  databases:
+    image: mysql:8.0
+    container_name: db
+    restart: always
+    environment:
+      MYSQL_USER: databases
+      MYSQL_PASSWORD: databases
+      MYSQL_ROOT_PASSWORD: databases
+      MYSQL_DATABASE: databases
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 10s
+      retries: 10
+    ports:
+      - "3306:3306"
     networks:
       - backend
 
   payment:
-    build:
-      context: payment-service/
-      dockerfile: Dockerfile
+    build: ./payment-service/
     volumes:
       - ./payment-service:/app
     depends_on:
       - rabbitmq
+      - databases
+    ports:
+      - "8005:6000"
+    networks:
+      - backend
+
+  email:
+    build: ./email-service/
+    volumes:
+      - ./email-service:/app
+    depends_on:
+      - rabbitmq
+      - databases
+    ports:
+      - "8004:6000"
+    networks:
+      - backend
+
+  event:
+    build: ./events-service/
+    volumes:
+      - ./events-service:/app
+    depends_on:
+      - rabbitmq
+      - databases
+    ports:
+      - "8003:6000"
+    networks:
+      - backend
+
+
+  user:
+    build: ./users-service/
+    volumes:
+      - ./users-service:/app
+    depends_on:
+      - rabbitmq
+      - databases
+    ports:
+      - "8002:6000"
     networks:
       - backend
 
   rabbitmq:
     image: rabbitmq:3-management
-    restart: always
+    container_name: amqp-node
     ports:
       - "5672:5672"
       - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 10s
+      timeout: 10s
+      retries: 3
     networks:
       - backend
+
+
+  entrypoint:
+    build: ./entrypoint/
+    volumes:
+      - ./entrypoint:/app
+    depends_on:
+      - rabbitmq
+    ports:
+      - "8001:6000"
+    networks:
+      - backend
+
+  front:
+    build: ./frontend/
+    container_name: react-front
+    volumes:
+      - ./frontend/cypress/videos:/usr/src/app/cypress/videos
+    ports:
+      - "8000:6000"
+    command: npm start
+    networks:
+      - backend
+
 
 networks:
   backend:

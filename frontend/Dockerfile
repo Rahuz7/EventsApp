@@ -17,6 +17,6 @@ RUN apt-get install -y libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-
 ENV NODE_PATH /dist/node_modules
 # bundle source
 COPY . /usr/src/app
-EXPOSE 8081
+EXPOSE 6000
 
 CMD npm test ; npm start

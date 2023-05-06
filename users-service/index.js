@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 
 app.get('/', (req, res) => {
-  res.json({ message: 'Email service Running !' });
+  res.json({ message: 'User service Running !' });
 });
 
 app.listen(6000, () => {

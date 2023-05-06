@@ -15,4 +15,3 @@ COPY . /usr/src/app
 
 EXPOSE 6000
 CMD npm start;
-
