@@ -74,8 +74,10 @@ services:
     volumes:
       - ./users-service:/app
     depends_on:
-      - rabbitmq
-      - databases
+        databases:
+          condition: service_healthy
+        rabbitmq:
+          condition: service_healthy
     ports:
       - "8002:6000"
     networks:
@@ -92,8 +94,8 @@ services:
       - RABBITMQ_DEFAULT_PASS=guest
     healthcheck:
       test: rabbitmq-diagnostics -q ping
-      interval: 10s
-      timeout: 10s
+      interval: 20s
+      timeout: 20s
       retries: 3
     networks:
       - backend
@@ -101,22 +103,24 @@ services:
 
   entrypoint:
     build: ./entrypoint/
+    container_name: entrypoint
     volumes:
       - ./entrypoint:/app
     depends_on:
-      - rabbitmq
+      rabbitmq:
+        condition: service_healthy
     ports:
       - "8001:6000"
     networks:
       - backend
 
   front:
-    build: ./frontend/
-    container_name: react-front
+    build: ./frontend-react/
+    container_name: frontend-react
     volumes:
-      - ./frontend/cypress/videos:/usr/src/app/cypress/videos
+      - ./frontend-react/cypress/videos:/usr/src/app/cypress/videos
     ports:
-      - "8000:6000"
+      - "8000:3000"
     command: npm start
     networks:
       - backend
