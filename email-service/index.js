@@ -127,33 +127,7 @@ app.get('/sendmailtest', (req, res) => {
     });
 });
 
-const data = {
-    "recipient": "recipient@example.com",
-    "subject": "Confirmation de commande",
-    "template": "orderConfirmation",
-    "variables": {
-        "name": "Pierre",
-        "orderId": "123456789",
-        "products": [
-            {
-                "name": "Produit 1",
-                "price": 10,
-                "ref": "00001"
-            },
-            {
-                "name": "Produit 2",
-                "price": 20,
-                "ref": "00002"
-            },
-            {
-                "name": "Produit 3",
-                "price": 30,
-                "ref": "00003"
-            }
-        ],
-        "total": 60
-    }
-};
+
 
 app.post('/sendmail', async (req, res) => {
     console.log(req.body);
