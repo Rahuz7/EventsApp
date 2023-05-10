@@ -22,7 +22,8 @@ services:
       MYSQL_USER: databases
       MYSQL_PASSWORD: databases
       MYSQL_ROOT_PASSWORD: databases
-      MYSQL_DATABASE: databases
+    volumes: 
+      - ./init:/docker-entrypoint-initdb.d
     healthcheck:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
       timeout: 10s
@@ -61,8 +62,10 @@ services:
     volumes:
       - ./events-service:/app
     depends_on:
-      - rabbitmq
-      - databases
+        databases:
+          condition: service_healthy
+        rabbitmq:
+          condition: service_healthy
     ports:
       - "8003:6000"
     networks:
