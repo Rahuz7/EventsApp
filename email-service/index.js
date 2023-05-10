@@ -7,8 +7,10 @@ const path = require('path');
 const mqrabbit = require('./utils/mqrabbit')
 const serviceDir = './services';
 const ejs = require('ejs');
-
+const bodyParser = require('body-parser');
 const serviceMap = {};
+
+app.use(bodyParser.json());
 
 const loadService = (dir) => {
   fs.readdirSync(dir).forEach((file) => {
@@ -25,9 +27,6 @@ const loadService = (dir) => {
 };
 
 loadService(serviceDir);
-
-
-
   async function ecouterMessage() {
     const connection = await amqp.connect('amqp://guest:guest@amqp-node:5672/%2f');
     const channel = await connection.createChannel();
@@ -89,9 +88,8 @@ loadService(serviceDir);
 
     }, { noAck: true });
   }
-
   ecouterMessage().catch(console.error);
-const ejs = require('ejs');
+
 
 app.get('/', (req, res) => {
   res.json({ message: 'Email service Running !' });
@@ -101,67 +99,95 @@ app.listen(6000, () => {
   console.log('Serveur en écoute sur le port 6000');
 });
 
+
 app.get('/sendmailtest', (req, res) => {
-  // const { recipient, subject, template, variables } = req.body;
+    // const { recipient, subject, template, variables } = req.body;
 
-  const nodemailer = require('nodemailer');
+    const nodemailer = require('nodemailer');
 
-  let transporter = nodemailer.createTransport({
-    host: 'eventsapp-mailhog-1',
-    port: 1025, // or 8025
-    secure: false,
-  });
-
-  let mailOptions = {
-    from: 'sender@example.com',
-    to: 'recipient@example.com',
-    subject: 'Test Email',
-    text: 'Hello from Node.js!',
-  };
-
-  transporter.sendMail(mailOptions, function(error, info) {
-    if (error) {
-      console.log(error);
-    } else {
-      console.log('Email sent: ' + info.response);
-    }
-  });
-});
-
-
-
-app.post('/sendmail', async (req, res) => {
-  const { recipient, subject, template, variables } = req.body;
-
-  let transporter = nodemailer.createTransport({
-    host: 'eventsapp-mailhog-1',
-    port: 1025, // or 8025
-    secure: false,
-  });
-
-  try {
-    const renderedTemplate = await ejs.renderFile(`./templates/${template}.ejs`, variables);
+    let transporter = nodemailer.createTransport({
+        host: 'eventsapp-mailhog-1',
+        port: 1025, // or 8025
+        secure: false,
+    });
 
     let mailOptions = {
-      from: 'sender@example.com',
-      to: recipient,
-      subject: subject,
-      html: renderedTemplate,
+        from: 'sender@example.com',
+        to: 'recipient@example.com',
+        subject: 'Test Email',
+        text: 'Hello from Node.js!',
     };
 
     transporter.sendMail(mailOptions, function(error, info) {
-      if (error) {
-        console.log(error);
-        res.status(500).send('Error sending email');
-      } else {
-        console.log('Email sent: ' + info.response);
-        res.status(200).send('Email sent successfully');
-      }
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
     });
-  } catch (error) {
-    console.log(error);
-    res.status(500).send('Error rendering email template');
-  }
+});
+
+const data = {
+    "recipient": "recipient@example.com",
+    "subject": "Confirmation de commande",
+    "template": "orderConfirmation",
+    "variables": {
+        "name": "Pierre",
+        "orderId": "123456789",
+        "products": [
+            {
+                "name": "Produit 1",
+                "price": 10,
+                "ref": "00001"
+            },
+            {
+                "name": "Produit 2",
+                "price": 20,
+                "ref": "00002"
+            },
+            {
+                "name": "Produit 3",
+                "price": 30,
+                "ref": "00003"
+            }
+        ],
+        "total": 60
+    }
+};
+
+app.post('/sendmail', async (req, res) => {
+    console.log(req.body);
+    const { recipient, subject, template, variables } = req.body;
+    console.log(`Recipient: ${recipient}, Subject: ${subject}`);
+    let transporter = nodemailer.createTransport({
+        host: 'eventsapp-mailhog-1',
+        port: 1025, // or 8025
+        secure: false,
+    });
+
+    try {
+        const renderedTemplate = await ejs.renderFile(`./templates/${template}.ejs`, variables);
+
+        let mailOptions = {
+            from: 'sender@example.com',
+            to: recipient,
+            subject: subject,
+            html: renderedTemplate,
+        };
+
+        transporter.sendMail(mailOptions, function(error, info) {
+            if (error) {
+                console.log(error);
+                res.status(500).send('Error sending email');
+            } else {
+                console.log('Email sent: ' + info.response);
+                res.status(200).send('Email sent successfully');
+            }
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Error rendering email template');
+    }
 });
 
 

@@ -2,19 +2,21 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Titre de l'email</title>
+    <title>Confirmation de création de compte</title>
 </head>
 <body>
 <div style="max-width: 600px; margin: 0 auto;">
     <header style="background-color: #f2f2f2; padding: 20px;">
-        <h1 style="margin: 0;">Titre de l'email</h1>
+        <h1 style="margin: 0;">Confirmation de création de compte</h1>
     </header>
     <main style="background-color: #fff; padding: 20px;">
-        <p>Contenu de l'email</p>
+        <p>Bonjour <%= name %>,</p>
+        <p>Votre compte a bien été créé.</p>
+        <p>Merci de votre confiance.</p>
     </main>
     <footer style="background-color: #f2f2f2; padding: 20px;">
-        <p>Texte de pied de page</p>
-        <p><%= variables.name %>/p>
+        <p>Cordialement,</p>
+        <p>L'équipe de BookingEvent</p>
     </footer>
 </div>
 </body>
