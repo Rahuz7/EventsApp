@@ -15,7 +15,7 @@ export default class NavBar extends Component {
                   <nav className='nav'> 
                     <a href='#'>Je suis organisateur</a>
                     <a href='#'>Panier</a>
-                    <a href='#'>Calendrier</a>
+                    <a href='#' onClick={this.props.onEventsClick}>Calendrier</a>
                   </nav>
                 </div>
                 <div className='btn-group'>
