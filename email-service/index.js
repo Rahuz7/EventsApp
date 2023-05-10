@@ -40,8 +40,9 @@ loadService(serviceDir);
     channel.consume('email-api', async (message) => {
 
 
-
+     
       let data = JSON.parse(message.content.toString());
+      console.log('CONSUME DATA: ', data)
       if (serviceMap.hasOwnProperty(data.action)) {
           console.log(`Action '${data.action}' call`);
          data.pipeline = undefined;
@@ -134,7 +135,7 @@ app.post('/sendmail', async (req, res) => {
     const { recipient, subject, template, variables } = req.body;
     console.log(`Recipient: ${recipient}, Subject: ${subject}`);
     let transporter = nodemailer.createTransport({
-        host: 'eventsapp-mailhog-1',
+        host: 'mailhog',
         port: 1025, // or 8025
         secure: false,
     });
