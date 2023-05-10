@@ -3,19 +3,28 @@ const config = require("../config/auth.config");
 const User = db.user;
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
-
-const login = async (data) => {
+const { Op } = require('sequelize');
+const validateUser = async (data) => {
 
     let providedData = {
         success: false,
-        message: "erreur d'authentification"
+        message: "erreur de validation utilisateur"
     }
     try {
-        console.log("login provided Data:", data)
+        console.log("validateUser provided Data:", data)
         const user = await User.findOne({
             where: {
-            email: data.email
-            }
+                [Op.and]: [      
+                    {
+                        activationToken: {
+                            [db.Sequelize.Op.like]: `%${data.token}%`,
+                        }},
+                    {
+                        activationTokenUuid: {
+                            [db.Sequelize.Op.like]: `%${data.uuid}%`,
+                    }}
+                ],
+              },
         })
         if (!user) {
             console.log("user not found")
@@ -23,26 +32,13 @@ const login = async (data) => {
                 providedData
             }
         }
-
-        var passwordIsValid = bcrypt.compareSync(
-            data.password,
-            user.password
-        );
-        console.log("data.password", data.password)
-        console.log("user.password", user.password)
-        console.log("valid ?", passwordIsValid)
-        if (!passwordIsValid) {
-            console.log("password invalid")
+        if (user.isActive) {
             return {
                 providedData
             }
         }
-        if (!user.isActive) {
-            providedData.message = "Compte inactif";
-            return {
-                providedData
-            }
-        }
+        user.isActive = true;
+        await user.save();
         var token = jwt.sign({ id: user.id }, config.secret, {
             expiresIn: 86400 // 24 hours
         });
@@ -73,5 +69,5 @@ const login = async (data) => {
 }
 
 module.exports = {
-    login
+    validateUser
 };

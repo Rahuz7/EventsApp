@@ -6,6 +6,19 @@ const Op = db.Sequelize.Op;
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 
+function generateToken() {
+    const length = 30;
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let token = '';
+  
+    for (let i = 0; i < length; i++) {
+      token += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+  
+    return token;
+  }
+
+
 const  createUser = async (data) => {
     console.log("createUser data:", data)
     let providedData = {
@@ -14,13 +27,15 @@ const  createUser = async (data) => {
     }
 
     try {
+        const activationToken = generateToken()
+        const activationTokenUuid = generateToken()
         const user = await User.create({
             username: data.username,
             email: data.email,
             password: bcrypt.hashSync(data.password, 8),
-            nom: data.nom,
-            prenom: data.prenom,
-            telephone: data.telephone
+            isActive: false,
+            activationToken: activationToken,
+            activationTokenUuid: activationTokenUuid
         })
         if (data.roles) {
         const roles = await Role.findAll({
@@ -35,6 +50,10 @@ const  createUser = async (data) => {
         }
         providedData.success = true
         providedData.message = "Votre compte utilisateur à été crée avec succés."
+        providedData.activationToken = activationToken
+        providedData.activationTokenUuid = activationTokenUuid
+        providedData.email = data.email
+        providedData.username = data.username   
         return {
             providedData,
         } 

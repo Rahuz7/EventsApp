@@ -9,9 +9,15 @@ module.exports = (sequelize, Sequelize) => {
       password: {
         type: Sequelize.STRING
       },
-      nom: Sequelize.STRING,
-      prenom: Sequelize.STRING,
-      telephone: Sequelize.STRING
+      isActive: {
+        type: Sequelize.BOOLEAN            
+      },
+      activationToken: {
+        type: Sequelize.STRING            
+      },
+      activationTokenUuid: {
+        type: Sequelize.STRING            
+      }      
     });
     
     return Client;

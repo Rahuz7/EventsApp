@@ -9,10 +9,12 @@ const sendCreateUserResponse = (data, connectedSockets) => {
         id:data.id,
         providedData: {
             template: "accountCreation",
-            recipient: "jean@gmail.com",
+            recipient: data.providedData.email,
             subject: "Confirmation création de compte",
             variables: {
-                name: "Kean"
+                name: data.providedData.username,
+                token:  data.providedData.activationToken,
+                uuid: data.providedData.activationTokenUuid
             }
         },
         pipeline: "email-api",

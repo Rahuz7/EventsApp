@@ -34,7 +34,25 @@ const login = (socket, data) => {
 
 }
 
+const activate = (socket, data) => {
+
+    console.log('[UserService - activate] [DATA]', data)
+    const dataTmp = {
+        id:socket.id,
+        providedData: {
+            ...data
+        },
+        pipeline: "user-api",
+        action: "validateUser",
+        nextPipeline: "entrypoint",
+        nextAction: "sendCredential"
+    }
+    rabbitmq.sendTo(dataTmp.pipeline, JSON.stringify(dataTmp)); 
+
+}
+
 module.exports = {
     createUser,
-    login
+    login,
+    activate
 };

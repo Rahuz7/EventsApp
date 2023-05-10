@@ -3,11 +3,17 @@ import { useEffect, useState} from "react";
 import { Routes, Route, Switch, Link } from 'react-router-dom';
 import Composant1 from './Composant1';
 import Composant2 from './Composant2';
-import Login from './Login';
+//import Login from './Login';
 import socket from './Socket';
 import Panel from './Panel';
 import SignUp from './SignUp';
 import Shield from './ShieldMockup'
+import Navbar from "./components/navbar.component";
+import Home from "./components/home.component";
+import Signup from "./components/signup.component";
+import Login from "./components/login.component";
+import ActivateAccount from "./components/accountActivation.component";
+import Footer from "./components/footer.component";
 //const socket = io.connect("http://localhost:8001");
 //const socket = "hello";
 function App() {
@@ -50,37 +56,17 @@ function App() {
     <div>
       
           <div>
-              <nav>
-                  <ul>
-                      <li>
-                          <Link to="/">Composant 1</Link>
-                      </li>
-                     
-                      {isLoggedIn &&  <li> <Link to="/shield">Test shield</Link></li>}
-                      <li> <Link to="/signup">Signup</Link></li>
-                      <li>
-                          <Link to="/composant2">Composant 2</Link>
-
-                          {isLoggedIn ? (
-
-                              <button onClick={logout}> Logout - {username}</button>
-                            ) : (
-                              <Link to="/login">Login</Link>
-                            )}
-                          
-                      </li>
-                      <li> Notification: {count}
-                      </li>
-                  </ul>
-              </nav>
-              <Routes>   
-                    <Route path="/" element={<Composant1 />} />
+              <Navbar isLoggedIn={isLoggedIn} />
+              <Routes> 
+                    <Route path="/" element={<Home />} />
+                    <Route path="/test" element={<Composant1 />} />
                     <Route path="/panel/*" element={<Panel />} />
-                    <Route path="/composant2" element={<Composant2 />} />
-                    <Route path="/login" element={<Login onLogin={handleLogin} />} />
-                    <Route path="/signup" element={<SignUp />} />
+                    <Route path="/login" element={ <Login onLogin={handleLogin} />  } />
+                    <Route path="/signup" element={<Signup />} />
                     <Route path="/shield" element={<Shield />} />
+                    <Route path="/activate" element={<ActivateAccount onLogin={handleLogin} />} />
               </Routes>
+              <Footer />
           </div>
      
     </div>
