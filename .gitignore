@@ -4,3 +4,4 @@ frontend/node_modules
 frontend/package-lock.json
 email-service/node_modules
 email-service/package-lock.json
+.idea/*
