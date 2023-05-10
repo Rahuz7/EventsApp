@@ -3,6 +3,7 @@ import NavBar from './components/navbar.component';
 import LoginContent from './components/loginContent.component';
 import SignupContent from './components/signupContent.component';
 import Home from './components/home.component';
+import Footer from './components/footer.component';
 import './App.css';
 
 
@@ -59,6 +60,7 @@ class App extends Component {
           { this.state.showSignupContent && <SignupContent /> }
           { this.state.showHome && < Home /> }
         </div>
+        <Footer />
       </div>
     );
   }
