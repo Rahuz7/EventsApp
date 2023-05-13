@@ -1,5 +1,8 @@
 module.exports = (sequelize, Sequelize) => {
     const Client = sequelize.define('user', {
+      uuid: {
+        type: Sequelize.STRING
+      },
       username: {
         type: Sequelize.STRING
       },
@@ -17,7 +20,10 @@ module.exports = (sequelize, Sequelize) => {
       },
       activationTokenUuid: {
         type: Sequelize.STRING            
-      }      
+      },
+      isClosed: {
+        type: Sequelize.BOOLEAN            
+      }  
     });
     
     return Client;

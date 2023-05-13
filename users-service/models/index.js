@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 require('dotenv').config()
 // Create a new Sequelize instance
 const sequelize = new Sequelize(
-    'databases',
+    'user-databases',
     'databases',
     'databases',
     {
@@ -19,7 +19,7 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 db.user = require("./user.model.js")(sequelize, Sequelize);
 db.role = require("./role.model.js")(sequelize, Sequelize);
-
+db.userInfo = require("./user-info.model.js")(sequelize, Sequelize);
 
 db.role.belongsToMany(db.user, {
   through: "user_roles",

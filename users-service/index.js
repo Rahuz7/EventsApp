@@ -24,7 +24,7 @@ const loadService = (dir) => {
 };
 
 loadService(serviceDir);
-
+ console.log(serviceMap);
 
 db.sequelize.sync({force:true})
   .then(() => {
@@ -60,7 +60,7 @@ db.sequelize.sync({force:true})
     await channel.prefetch(numWorkers);
     channel.consume('user-api', async (message) => {
  
-  
+   
      
       let data = JSON.parse(message.content.toString());
       if (serviceMap.hasOwnProperty(data.action)) {

@@ -34,12 +34,16 @@ services:
       - backend
 
   payment:
-    build: ./payment-service/
+    build: 
+      context: ./
+      dockerfile: ./payment-service/Dockerfile
     volumes:
       - ./payment-service:/app
     depends_on:
-      - rabbitmq
-      - databases
+       databases:
+          condition: service_healthy
+       rabbitmq:
+          condition: service_healthy
     ports:
       - "8005:6000"
     networks:
@@ -75,7 +79,9 @@ services:
       - backend
 
   event:
-    build: ./events-service/
+    build:
+      context: ./
+      dockerfile: ./events-service/Dockerfile
     volumes:
       - ./events-service:/app
     depends_on:
@@ -90,7 +96,9 @@ services:
 
 
   user:
-    build: ./users-service/
+    build: 
+      context: ./
+      dockerfile: ./users-service/Dockerfile
     volumes:
       - ./users-service:/app
     depends_on:

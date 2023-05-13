@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const mqrabbit = require('./utils/mqrabbit')
 const serviceDir = './services';
-
+const db = require('./models');
 const serviceMap = {};
 
 const loadService = (dir) => {
@@ -23,6 +23,14 @@ const loadService = (dir) => {
 };
 
 loadService(serviceDir);
+
+db.sequelize.sync({force:true})
+  .then(() => {
+    console.log("Synced db.");
+  })
+  .catch((err) => {
+    console.log("Failed to sync db: " + err.message);
+  });
 
 
   async function ecouterMessage() {

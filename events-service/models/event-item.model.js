@@ -1,8 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
-    const Event = sequelize.define('event', {
-        ownerUuid: {
-            type: Sequelize.STRING,
-        },
+    const EventItem = sequelize.define('event_item', {
         nom: {
             type: Sequelize.STRING,
         },
@@ -23,5 +20,5 @@ module.exports = (sequelize, Sequelize) => {
         }
 });
     
-return Event;
+return EventItem;
 };

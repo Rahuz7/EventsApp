@@ -17,6 +17,7 @@
     "dotenv": "^6.2.0",
     "react-icons": "4.8.0",
     "bootstrap": "^4.6.2",
+    "react-bootstrap": "^2.7.4",
     "react-select": "*",
     "socket.io-client": "4.6.1"
   },

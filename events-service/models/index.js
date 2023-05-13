@@ -18,8 +18,18 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 db.event = require("./event.model.js")(sequelize, Sequelize);
+db.basket = require("./basket.model.js")(sequelize, Sequelize);
+db.eventItem = require("./event-item.model.js")(sequelize, Sequelize);
+db.eventType = require("./event-type.model.js")(sequelize, Sequelize);
 
 
+db.event.hasMany(db.eventItem);
+db.eventItem.belongsTo(db.event);
 
+db.eventType.hasMany(db.event);
+db.event.belongsTo(db.eventType);
+
+db.basket.hasMany(db.eventItem);
+db.eventItem.belongsTo(db.basket);
 
 module.exports = db;

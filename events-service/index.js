@@ -9,6 +9,19 @@ const db = require('./models');
 
 db.sequelize.sync({force:true})
   .then(() => { 
+    const eventTypesData = [
+      { id: 1, libelle: 'Concert', avatarSrc: 'concert.png' },
+      { id: 2, libelle: 'Meeting', avatarSrc: 'meeting.png' },
+      { id: 3, libelle: 'Exposition', avatarSrc: 'exposition.png' },
+      { id: 4, libelle: 'Festival', avatarSrc: 'festival.png' },
+      { id: 5, libelle: 'Conférence', avatarSrc: 'conference.png' },
+      { id: 6, libelle: 'Spectacle', avatarSrc: 'spectacle.png' },
+      { id: 7, libelle: 'Sport', avatarSrc: 'sport.png' },
+      { id: 8, libelle: 'Cinéma', avatarSrc: 'cinema.png' },
+      { id: 9, libelle: 'Atelier', avatarSrc: 'atelier.png' },
+      { id: 10, libelle: 'Foire', avatarSrc: 'foire.png' },
+    ];
+    db.eventType.bulkCreate(eventTypesData);
     console.log("Synced db.");
   })
   .catch((err) => {

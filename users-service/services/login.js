@@ -43,6 +43,12 @@ const login = async (data) => {
                 providedData
             }
         }
+        if (user.isClosed) {
+            providedData.message = "Compte désactivé";
+            return {
+                providedData
+            }
+        }
         var token = jwt.sign({ id: user.id }, config.secret, {
             expiresIn: 86400 // 24 hours
         });
@@ -52,12 +58,16 @@ const login = async (data) => {
         for (let i = 0; i < roles.length; i++) {
             authorities.push("ROLE_" + roles[i].name.toUpperCase());
         }
+        var authoritiesToken = jwt.sign({ roles: authorities }, config.secret, {
+            expiresIn: 86400 // 24 hours
+        });
         providedData = {
             id: user.id,
             username: user.username,
             email: user.email,
             roles: authorities,
             accessToken: token,
+            authoritiesToken: authoritiesToken,
             success:true,
             message: "Authentification réussie"
         };

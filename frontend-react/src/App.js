@@ -14,6 +14,8 @@ import Signup from "./components/signup.component";
 import Login from "./components/login.component";
 import ActivateAccount from "./components/accountActivation.component";
 import Footer from "./components/footer.component";
+import EventCalendar from "./components/eventCalendar.component"
+import './styles/global.css';
 //const socket = io.connect("http://localhost:8001");
 //const socket = "hello";
 function App() {
@@ -41,6 +43,7 @@ function App() {
 };
 
   useEffect(() => {
+    document.body.classList.add('body-class');
     const user = JSON.parse(localStorage.getItem('user'))
     console.log(user)
     if (user != null && user.username != null) {
@@ -64,6 +67,7 @@ function App() {
                     <Route path="/login" element={ <Login onLogin={handleLogin} />  } />
                     <Route path="/signup" element={<Signup />} />
                     <Route path="/shield" element={<Shield />} />
+                    <Route path="/event" element={<EventCalendar />} />
                     <Route path="/activate" element={<ActivateAccount onLogin={handleLogin} />} />
               </Routes>
               <Footer />
