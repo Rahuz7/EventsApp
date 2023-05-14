@@ -15,6 +15,9 @@ import Login from "./components/login.component";
 import ActivateAccount from "./components/accountActivation.component";
 import Footer from "./components/footer.component";
 import EventCalendar from "./components/eventCalendar.component"
+import QueryAccess from "./components/queryAccess.component"
+import GiveAccess from "./components/giveAccess.component"
+import EventDashboard from "./components/eventDashboard.component"
 import './styles/global.css';
 //const socket = io.connect("http://localhost:8001");
 //const socket = "hello";
@@ -69,6 +72,9 @@ function App() {
                     <Route path="/shield" element={<Shield />} />
                     <Route path="/event" element={<EventCalendar />} />
                     <Route path="/activate" element={<ActivateAccount onLogin={handleLogin} />} />
+                    <Route path="/event/access" element={<QueryAccess />} />
+                    <Route path="/event/access/activate" element={<GiveAccess />} />
+                    <Route path="/dashboard/event" element={<EventDashboard />} />
               </Routes>
               <Footer />
           </div>

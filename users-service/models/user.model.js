@@ -23,7 +23,10 @@ module.exports = (sequelize, Sequelize) => {
       },
       isClosed: {
         type: Sequelize.BOOLEAN            
-      }  
+      },
+      isAnonym: {
+        type: Sequelize.BOOLEAN
+      }
     });
     
     return Client;

@@ -61,6 +61,9 @@ const login = async (data) => {
         var authoritiesToken = jwt.sign({ roles: authorities }, config.secret, {
             expiresIn: 86400 // 24 hours
         });
+        var userUuidToken = jwt.sign({ uuid: user.uuid }, config.secret, {
+            expiresIn: 86400 // 24 hours
+        });
         providedData = {
             id: user.id,
             username: user.username,
@@ -68,6 +71,7 @@ const login = async (data) => {
             roles: authorities,
             accessToken: token,
             authoritiesToken: authoritiesToken,
+            userUuidToken: userUuidToken,
             success:true,
             message: "Authentification réussie"
         };

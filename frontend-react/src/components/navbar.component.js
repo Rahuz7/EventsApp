@@ -12,6 +12,18 @@ const Navbar = ({isLoggedIn}) => {
         const handleClick = () => {
             navigate('/');
         };
+
+        const navigateToAccessEvent = () => {
+          const user = JSON.parse(localStorage.getItem('user'));
+          console.log(user)
+          if (!user) {
+            console.log('condition', user)
+            navigate('/login');
+            return null
+          }
+          console.log("pass")
+          navigate('/event/access');
+       };
         return (
             <div className='container'>
               <header className='navbar-interactive'>
@@ -19,7 +31,7 @@ const Navbar = ({isLoggedIn}) => {
                 <a onClick={handleClick} className='title' >EV-France</a>
                 <div className='desktop-menu'>
                   <nav className='nav'> 
-                    <a href='#'>Je suis organisateur</a>
+                    <a onClick={navigateToAccessEvent}>Je suis organisateur</a>
                     <a href='#'>Panier</a>
                     <a href='#'>Calendrier</a>
                   </nav>

@@ -1,9 +1,12 @@
 module.exports = (sequelize, Sequelize) => {
     const EventItem = sequelize.define('event_item', {
-        nom: {
+        title: {
             type: Sequelize.STRING,
         },
         description: {
+            type: Sequelize.STRING,
+        },
+        localtion: {
             type: Sequelize.STRING,
         },
         date_debut: {
@@ -12,7 +15,7 @@ module.exports = (sequelize, Sequelize) => {
         date_fin: {
             type: Sequelize.DATE,
         },
-        prix: {
+        price: {
             type: Sequelize.DECIMAL(10, 2),
         },
         place: {

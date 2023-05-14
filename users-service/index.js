@@ -34,7 +34,7 @@ db.sequelize.sync({force:true})
     });
     db.role.create({
       id: 2,
-      name: "moderator"
+      name: "organisateur"
     });
    
     db.role.create({
@@ -67,11 +67,12 @@ db.sequelize.sync({force:true})
           console.log(`Action '${data.action}' call`);
          data.pipeline = undefined;
          const { providedData, pipeline, action ,nextPipeline, nextAction } = await serviceMap[data.action](data.providedData); // Appelle la fonction appropriée en fonction de l'action
-         data.action = undefined;
+         
          console.log("Retour action ", data.action);
          console.log("providedData", providedData);
          console.log("pipeline", pipeline)
          console.log("action", action)
+         data.action = undefined;
          console.log("nextPipeline", nextPipeline)
          console.log("nextAction", nextAction)
 

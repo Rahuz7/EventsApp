@@ -11,6 +11,7 @@ if [ -z "$CONTAINER_NAME" ] || [ -z "$IMPORT_FILE" ]; then
 fi
 
 # Import des données
-docker exec -i $CONTAINER_NAME mysql --user=databases --password=databases   databases < "$IMPORT_FILE"
-
+docker exec -i $CONTAINER_NAME mysql --user=databases --password=databases   user-databases < "${IMPORT_FILE}_user.sql"
+docker exec -i $CONTAINER_NAME mysql --user=databases --password=databases   event-databases < "${IMPORT_FILE}_event.sql"
+docker exec -i $CONTAINER_NAME mysql --user=databases --password=databases   payment-databases < "${IMPORT_FILE}_payment.sql"
 echo "Import terminé avec succès : $IMPORT_FILE"

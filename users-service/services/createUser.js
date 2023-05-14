@@ -7,7 +7,6 @@ const Op = db.Sequelize.Op;
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 const generateToken = require('../module/generator/token/tokenGenerator');
-
 const createOrLinkUserInfo = async (userUuid, userEmail, transaction = null) => {
 
     try {
@@ -46,35 +45,57 @@ const  createUser = async (data) => {
         const uuid = generateToken();
         const activationToken = generateToken();
         const activationTokenUuid = generateToken();
-        const userWithToken = await User.findOne({
-            where: {
-              activationToken: activationToken
-            }
-        });
+  
 
-        if (userWithToken) {
+        const existingUser = await User.findOne({
+            where: {
+              [db.Sequelize.Op.or]: [
+                { activationToken: activationToken },
+                { uuid: uuid },
+                { activationTokenUuid: activationTokenUuid },
+                { email: data.email },
+                { isAnonym: true }
+              ]
+        }})
+        if  ( existingUser &&  (!existingUser.isAnonym || (existingUser.isAnonym && existingUser.email != data.email) )) {
             return {
                 providedData,
             } 
         }
-
-        const userWithUUid = await User.findOne({
-            where: {
-                uuid: uuid
-            }
-        });
-
-        if (userWithUUid) {
-            return {
-                providedData,
-            } 
-        }
-        console.log(User)
         const t = await db.sequelize.transaction();
  
+        if (existingUser) {
+            try {
+               await existingUser.update(
+                {
+                    username: data.username,
+                    email: data.email,
+                    password: bcrypt.hashSync(data.password, 8),
+                    isActive: false,
+                    activationToken: activationToken,
+                    activationTokenUuid: activationTokenUuid,
+                    isClosed: false,
+                    isAnonym: false,
+                    roles: [1]
+                }, { transaction: t })
+               await createOrLinkUserInfo(existingUser.uuid, existingUser.email, t)
+               await t.commit();
+            } catch (e) {
+                await t.rollback();
+            }
+            providedData.success = true
+            providedData.message = "Votre compte utilisateur à été appairé avec succés."
+            providedData.activationToken = activationToken
+            providedData.activationTokenUuid = activationTokenUuid
+            providedData.email = data.email
+            providedData.username = data.username   
+            return {
+                providedData,
+            } 
+        }
+    
         try {
-            console.log(User)
-            console.log('TEST WALL')
+ 
             const user = await User.create({
                 uuid:uuid,
                 username: data.username,
@@ -83,7 +104,8 @@ const  createUser = async (data) => {
                 isActive: false,
                 activationToken: activationToken,
                 activationTokenUuid: activationTokenUuid,
-                isClosed: false
+                isClosed: false,
+                isAnonym: false
             }, { transaction: t })
             console.log('END WALL')
             if (data.roles) {

@@ -1,14 +1,18 @@
-const paginate = async (model, pageNumber, pageSize, attributes = null, includes = null) => {
+
+
+const paginate = async (model, pageNumber, pageSize, attributes = null, includes = null, where = null) => {
     try {
       const offset = (pageNumber - 1) * pageSize;
-  
+
       // Utilisez Sequelize pour effectuer la pagination et récupérer les attributs spécifiés
       const records = await model.findAndCountAll({
         offset,
         limit: pageSize,
         attributes: attributes,
+        where: where,
         include: includes,
-        raw: true, 
+        raw: true,
+        nest:true
       });
   
       return records.rows;

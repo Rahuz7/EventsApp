@@ -67,8 +67,9 @@ async function ecouterMessage() {
       console.log(`Action '${data.action}' call`);
      data.pipeline = undefined;
      const { providedData, pipeline, action ,nextPipeline, nextAction } = serviceMap[data.action](data, connectedSockets); // Appelle la fonction appropriée en fonction de l'action
-     data.action = undefined;
+     
      console.log("Retour action ", data.action);
+     data.action = undefined;
      console.log("providedData", providedData);
      console.log("pipeline", pipeline)
      console.log("action", action)

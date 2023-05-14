@@ -21,7 +21,7 @@ db.sequelize.sync({force:true})
       { id: 9, libelle: 'Atelier', avatarSrc: 'atelier.png' },
       { id: 10, libelle: 'Foire', avatarSrc: 'foire.png' },
     ];
-    db.eventType.bulkCreate(eventTypesData);
+    db.EventType.bulkCreate(eventTypesData);
     console.log("Synced db.");
   })
   .catch((err) => {

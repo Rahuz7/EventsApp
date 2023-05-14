@@ -17,19 +17,19 @@ const db = {};
 
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
-db.event = require("./event.model.js")(sequelize, Sequelize);
-db.basket = require("./basket.model.js")(sequelize, Sequelize);
-db.eventItem = require("./event-item.model.js")(sequelize, Sequelize);
-db.eventType = require("./event-type.model.js")(sequelize, Sequelize);
+db.Event = require("./event.model.js")(sequelize, Sequelize);
+db.Basket = require("./basket.model.js")(sequelize, Sequelize);
+db.EventItem = require("./event-item.model.js")(sequelize, Sequelize);
+db.EventType = require("./event-type.model.js")(sequelize, Sequelize);
 
 
-db.event.hasMany(db.eventItem);
-db.eventItem.belongsTo(db.event);
+db.Event.hasMany(db.EventItem);
+db.EventItem.belongsTo(db.Event);
 
-db.eventType.hasMany(db.event);
-db.event.belongsTo(db.eventType);
+db.EventType.hasMany(db.Event);
+db.Event.belongsTo(db.EventType, { foreignKey: 'eventTypeId' });
 
-db.basket.hasMany(db.eventItem);
-db.eventItem.belongsTo(db.basket);
+db.Basket.hasMany(db.EventItem);
+db.EventItem.belongsTo(db.Basket);
 
 module.exports = db;

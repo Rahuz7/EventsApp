@@ -11,6 +11,8 @@ if [ -z "$CONTAINER_NAME" ] || [ -z "$EXPORT_FILE" ]; then
 fi
 
 # Export des données
-docker exec -i $CONTAINER_NAME mysqldump -udatabases -pdatabases databases --no-tablespaces > "$EXPORT_FILE"
+docker exec -i $CONTAINER_NAME mysqldump -udatabases -pdatabases user-databases --no-tablespaces > "${EXPORT_FILE}_user.sql"
+docker exec -i $CONTAINER_NAME mysqldump -udatabases -pdatabases event-databases --no-tablespaces > "${EXPORT_FILE}_event.sql"
+docker exec -i $CONTAINER_NAME mysqldump -udatabases -pdatabases payment-databases --no-tablespaces > "${EXPORT_FILE}_payment.sql"
 
 echo "Export terminé avec succès : $EXPORT_FILE"

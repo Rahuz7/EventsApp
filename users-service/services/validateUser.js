@@ -48,12 +48,20 @@ const validateUser = async (data) => {
         for (let i = 0; i < roles.length; i++) {
             authorities.push("ROLE_" + roles[i].name.toUpperCase());
         }
+        var authoritiesToken = jwt.sign({ roles: authorities }, config.secret, {
+            expiresIn: 86400 // 24 hours
+        });
+        var userUuidToken = jwt.sign({ uuid: user.uuid }, config.secret, {
+            expiresIn: 86400 // 24 hours
+        });
         providedData = {
             id: user.id,
             username: user.username,
             email: user.email,
             roles: authorities,
             accessToken: token,
+            authoritiesToken: authoritiesToken,
+            userUuidToken: userUuidToken,
             success:true,
             message: "Authentification réussie"
         };
