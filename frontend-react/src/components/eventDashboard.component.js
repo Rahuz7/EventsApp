@@ -16,6 +16,11 @@ const EventDashboard = () => {
             event.preventDefault();
             Send("grantMeEventOwner", {}, socket)
         };
+
+        const navigateToCreateEvent = (event) => {
+          event.preventDefault();
+          navigate('/dashboard/event/new');
+        }
         const user = JSON.parse(localStorage.getItem('user'));
         
         useEffect(() => {
@@ -70,7 +75,7 @@ const EventDashboard = () => {
         return (
             <div className='event-owner-content-container'>
             <h1>Mes evènements</h1>
-            <button class="button-event">Créer un évènement</button> 
+            <button onClick={navigateToCreateEvent} class="button-event">Créer un évènement</button> 
             {message && <p>{message}</p>}
             <EventListOwner events={events} />
           

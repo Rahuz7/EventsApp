@@ -131,7 +131,7 @@ const EventList = () => {
               </div>
               <div className="event-card-cart">
                 <a href='#'> {/* ACTION WHEN CLICK ON ADD TO CART */}
-                  <img className="icon-shopping-cart" src="./icons/ajout-panier.svg" alt='ajouter au panier' style={{ width: '30px', height: '30px'}}/>
+                  <img className="icon-shopping-cart" src="/icons/ajout-panier.svg" alt='ajouter au panier' style={{ width: '30px', height: '30px'}}/>
                 </a>
               </div>
             </div>

@@ -95,21 +95,21 @@ const EventListOwner = ({events}) => {
           <div className="event" key={event.id}>
              <div className="event-card">
               {event.event_type && (event.event_type.avatarSrc && (
-                <div className="event-image">
+                <div className="event-image-owner">
                         <img src={`/images/${event.event_type.avatarSrc}`} alt={event.title} />
                 </div>
               ))}
               <div className='event-card-content'>
-              <p className="event-title">{event.event_type.avatarSrc}</p>
                 <h3 className="event-title">{event.title}</h3>
-                <p className="event-location">{event.location}</p>
-                <p className="event-date">{event.dateDebut}</p>
-                <p className="event-date">{event.dateFin}</p>
-                <p className="event-price">{event.price}</p>
+                <p className="event-location">Emplacement : {event.location}</p>
+                <p className="event-date">Date debut : {event.dateDebut}</p>
+                <p className="event-date">Date fin : {event.dateFin}</p>
+                <p className="event-date">Date fin : {event.place}</p>
+                <p className="event-price">Prix : {event.price}</p>
               </div>
               <div className="event-card-cart">
                 <a href='#'> {/* ACTION WHEN CLICK ON ADD TO CART */}
-                  <img className="icon-shopping-cart" src="./icons/ajout-panier.svg" alt='ajouter au panier' style={{ width: '30px', height: '30px'}}/>
+                  <img className="icon-shopping-cart" src="/icons/ajout-panier.svg" alt='ajouter au panier' style={{ width: '30px', height: '30px'}}/>
                 </a>
               </div>
             </div>

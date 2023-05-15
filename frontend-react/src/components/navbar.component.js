@@ -27,7 +27,7 @@ const Navbar = ({isLoggedIn}) => {
         return (
             <div className='container'>
               <header className='navbar-interactive'>
-                <img src="./icons/icon.png" alt="logo" className='logo' />
+                <img src="/icons/icon.png" alt="logo" className='logo' />
                 <a onClick={handleClick} className='title' >EV-France</a>
                 <div className='desktop-menu'>
                   <nav className='nav'> 
