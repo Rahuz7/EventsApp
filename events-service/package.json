@@ -21,7 +21,9 @@
       "dotenv": "^6.2.0",
       "jsonwebtoken": "^8.5.1",
       "bcryptjs": "^2.4.3",
-      "crypto": "1.0.1"
+      "crypto": "1.0.1",
+      "validator": "13.9.0",
+      "decimal.js": "10.4.3"
     }
   }
   

@@ -1,25 +1,42 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/form.css';
+import '../styles/buttonEvent.css';
 import socket from '../Socket';
 import Decimal from 'decimal.js';
+import Send from '../SendMessage';
+import { useNavigate } from 'react-router-dom';
 
 const CreateEventForm = () => {
-  const [titre, setTitre] = useState('');
+  const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [emplacement, setEmplacement] = useState('');
+  const [location, setLocation] = useState('');
   const [dateDebut, setDateDebut] = useState('');
   const [dateFin, setDateFin] = useState('');
   const [price, setPrice] = useState('');
-  const [nbPlace, setNbPlace] = useState(0);
+  const [place, setPlace] = useState(0);
   const [eventTypes, setEventTypes] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedEventType, setSelectedEventType] = useState(0);
+  const [message, setMessage] = useState('');
 
+  const navigate = useNavigate();
+
+
+  const user = JSON.parse(localStorage.getItem('user'));
   useEffect(() => {
     const fetchEventTypes = async () => {
+      
+      if (!user) {
+        navigate('/login');
+      } else if (!user.roles.includes("ROLE_ORGANISATEUR")) { 
+        Send("refreshCredential", {}, socket)
+      } 
+      
       try {
         setIsLoading(true);
 
+
+        Send("getEventType", {pageNumber:1, pageSize:10}, socket)
         // Effectuer la requête pour récupérer les event types depuis l'API
        // const response = await fetch('https://example.com/api/eventTypes');
        // const data = await response.json();
@@ -74,49 +91,94 @@ const CreateEventForm = () => {
 
     const newNbPlace = parseInt(inputValue, 10) || 0; // Convertir en nombre ou utiliser 0 si la conversion échoue
     const maxPlaces = 10000; // Nombre maximum de places autorisé
-    setNbPlace(Math.min(newNbPlace, maxPlaces)); // Limiter la valeur à maxPlaces
+    setPlace(Math.min(newNbPlace, maxPlaces)); // Limiter la valeur à maxPlaces
   };
 
 
-  const handleSubmit = (event) => {
+  const createEvent = (event) => {
     event.preventDefault();
 
     // Effectuer une action avec les données du formulaire
     const formData = {
-      titre,
+      title,
       description,
       eventType: selectedEventType,
-      emplacement,
+      location,
       dateDebut,
       dateFin,
       price,
-      nbPlace
+      place
     };
 
     console.log(formData);
-
+    Send("addEvent", formData, socket)
     // Réinitialiser le formulaire
-    setTitre('');
+    setTitle('');
     setDescription('');
-    setEmplacement('');
+    setLocation('');
     setDateDebut('');
     setDateFin('');
     setPrice('');
-    setNbPlace(0);
+    setPlace(0);
     setSelectedEventType('');
     
   };
 
+  useEffect(() => {
+    socket.on("get-crud-response", (data) => {
+      console.log("data", data)
+      console.log("JSON.stringify(data)", JSON.stringify(data))
+      if (data.success == true) {
+        
+        setMessage(data.message);
+        navigate('/dashboard/event')
+      } else {
+        setMessage(data.message);
+      }
+      
+    });
+    socket.on("get-collection-response", (data) => {
+      console.log("data", data)
+      console.log("JSON.stringify(data)", JSON.stringify(data))
+      if (data.success == true) {
+        setEventTypes(data.events);
+        setMessage(data.message);
+
+      } else {
+        setMessage(data.message);
+      }
+      
+    });
+    socket.on("fetch-credential", (data) => {
+      console.log("data", data)
+      console.log("JSON.stringify(data)", JSON.stringify(data))
+      if (data.success == true) {
+        localStorage.setItem("user", JSON.stringify(data));
+        if (data.roles.includes("ROLE_ORGANISATEUR")) {
+          navigate('/dashboard/event/new');
+        } else {
+          navigate('/event/access');
+        }
+        setMessage(data.message);
+        
+      } else {
+        setMessage(data.message);
+      }
+      
+    });
+  }, [socket]);
+
+
   return (
     <div className='login-content-container'>
-      <form className='form' onSubmit={handleSubmit}>
+      <form className='form' onSubmit={createEvent}>
       <label>
         Titre:
       </label>
         <input
           type="text"
-          value={titre}
-          onChange={(e) => setTitre(e.target.value)}
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
           required
         />
      
@@ -155,8 +217,8 @@ const CreateEventForm = () => {
       </label>
         <input
           type="text"
-          value={emplacement}
-          onChange={(e) => setEmplacement(e.target.value)}
+          value={location}
+          onChange={(e) => setLocation(e.target.value)}
           required
         />
   
@@ -199,7 +261,7 @@ const CreateEventForm = () => {
       </label>
         <input
           type="text" // Utiliser "text" au lieu de "number"
-          value={nbPlace}
+          value={place}
           onChange={handleNbPlaceChange}
           inputMode="numeric" // Spécifier le mode de saisie numérique
           pattern="\d*" // Limiter la saisie aux chiffres uniquement
@@ -208,7 +270,7 @@ const CreateEventForm = () => {
         />
 
       <br />
-      <button type="submit">Soumettre</button>
+      <button onClick={createEvent} class="button-event">Créer mon évènement</button> 
     </form>
     </div>
   );

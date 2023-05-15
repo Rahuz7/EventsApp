@@ -6,7 +6,7 @@ const config = require("../config/auth.config");
 var jwt = require("jsonwebtoken");
 const {hasAuthority, verifyToken} = require('../module/security/authority');
 
-const  getMyEvents = async (data) => {
+const  getEventType = async (data) => {
     console.log("getMyEvent data:", data)
     let providedData = {
         success: false,
@@ -26,18 +26,8 @@ const  getMyEvents = async (data) => {
               providedData,
           }
       }
-      const events = await paginate(Event, data.pageNumber, data.pageSize, 
-        ['id', 'title', 'description', 'location' , ['date_debut', 'dateDebut'], ['date_fin', 'dateFin'], 'price', 'place'],
-        [
-            {
-              model: EventType,
-            },
-          ],
-        {
-
-                ownerUuid: decodedUuid
-            
-        })
+      const events = await paginate(EventType, data.pageNumber, data.pageSize, 
+        ['id', 'libelle'])
       providedData.events = events 
       providedData.success = true;
       providedData.message = "Events paginés avec succés"
@@ -54,5 +44,5 @@ const  getMyEvents = async (data) => {
 }
 
 module.exports = {
-    getMyEvents
+    getEventType
 };

@@ -6,11 +6,11 @@ const config = require("../config/auth.config");
 var jwt = require("jsonwebtoken");
 const {hasAuthority, verifyToken} = require('../module/security/authority');
 
-const  getMyEvents = async (data) => {
-    console.log("getMyEvent data:", data)
+const  editEvent = async (data) => {
+    console.log("editEvent data:", data)
     let providedData = {
         success: false,
-        message: "Erreur durant la pagination des l'utilisateur."
+        message: "Erreur durant l'édition de l'évènement."
     }
 
     try {
@@ -26,21 +26,10 @@ const  getMyEvents = async (data) => {
               providedData,
           }
       }
-      const events = await paginate(Event, data.pageNumber, data.pageSize, 
-        ['id', 'title', 'description', 'location' , ['date_debut', 'dateDebut'], ['date_fin', 'dateFin'], 'price', 'place'],
-        [
-            {
-              model: EventType,
-            },
-          ],
-        {
 
-                ownerUuid: decodedUuid
-            
-        })
-      providedData.events = events 
+ 
       providedData.success = true;
-      providedData.message = "Events paginés avec succés"
+      providedData.message = "Events édité avec succés"
       return {
         providedData
       }
@@ -54,5 +43,5 @@ const  getMyEvents = async (data) => {
 }
 
 module.exports = {
-    getMyEvents
+    editEvent
 };

@@ -5,12 +5,13 @@ const EventType = db.EventType;
 const config = require("../config/auth.config");
 var jwt = require("jsonwebtoken");
 const {hasAuthority, verifyToken} = require('../module/security/authority');
+const Decimal = require('decimal.js');
 
-const  getMyEvents = async (data) => {
-    console.log("getMyEvent data:", data)
+const  addEvent = async (data) => {
+    console.log("addEvent data:", data)
     let providedData = {
         success: false,
-        message: "Erreur durant la pagination des l'utilisateur."
+        message: "Erreur durant la création de l'évènement."
     }
 
     try {
@@ -26,21 +27,21 @@ const  getMyEvents = async (data) => {
               providedData,
           }
       }
-      const events = await paginate(Event, data.pageNumber, data.pageSize, 
-        ['id', 'title', 'description', 'location' , ['date_debut', 'dateDebut'], ['date_fin', 'dateFin'], 'price', 'place'],
-        [
-            {
-              model: EventType,
-            },
-          ],
-        {
 
-                ownerUuid: decodedUuid
-            
-        })
-      providedData.events = events 
+      const event = Event.create({
+        ownerUuid: decodedUuid,
+        title: data.title,
+        description: data.description,
+        location: data.location,
+        date_debut: data.dateDebut,
+        date_fin: data.dateFin,
+        price: new Decimal(data.price),
+        place: data.place,
+        eventTypeId: data.eventType
+      })
+      
       providedData.success = true;
-      providedData.message = "Events paginés avec succés"
+      providedData.message = "Events crée avec succés"
       return {
         providedData
       }
@@ -54,5 +55,5 @@ const  getMyEvents = async (data) => {
 }
 
 module.exports = {
-    getMyEvents
+    addEvent
 };

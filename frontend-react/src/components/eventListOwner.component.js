@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import Pagination from 'react-bootstrap/Pagination';
 import '../styles/eventList.css';
-
+import { format } from 'date-fns';
+import frLocale from 'date-fns/locale/fr';
 const EventListOwner = ({events}) => {
   const [eventsPerPage] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
@@ -99,12 +100,12 @@ const EventListOwner = ({events}) => {
                         <img src={`/images/${event.event_type.avatarSrc}`} alt={event.title} />
                 </div>
               ))}
-              <div className='event-card-content'>
+              <div className='event-card-content' >
                 <h3 className="event-title">{event.title}</h3>
                 <p className="event-location">Emplacement : {event.location}</p>
-                <p className="event-date">Date debut : {event.dateDebut}</p>
-                <p className="event-date">Date fin : {event.dateFin}</p>
-                <p className="event-date">Date fin : {event.place}</p>
+                <p className="event-date">Date debut :  {format(new Date(event.dateDebut), 'dd MMMM yyyy HH:mm', { locale: frLocale })}</p>
+                <p className="event-date">Date fin :  {format(new Date(event.dateFin), 'dd MMMM yyyy HH:mm', { locale: frLocale })}</p>
+                <p className="event-date">Places : {event.place}</p>
                 <p className="event-price">Prix : {event.price}</p>
               </div>
               <div className="event-card-cart">
