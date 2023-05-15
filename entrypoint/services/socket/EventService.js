@@ -51,8 +51,44 @@ const getEventType = (socket, data) => {
 
 }
 
+const getEvent = (socket, data) => {
+
+    console.log('[EventService - getEvent] [DATA]', data)
+    const dataTmp = {
+        id:socket.id,
+        providedData: {
+            ...data
+        },
+        pipeline: "event-api",
+        action: "getEvent",
+        nextPipeline: "entrypoint",
+        nextAction: "genericSingleItemResponse"
+    }
+    rabbitmq.sendTo(dataTmp.pipeline, JSON.stringify(dataTmp)); 
+
+}
+
+const editEvent = (socket, data) => {
+
+    console.log('[EventService - editEvent] [DATA]', data)
+    const dataTmp = {
+        id:socket.id,
+        providedData: {
+            ...data
+        },
+        pipeline: "event-api",
+        action: "editEvent",
+        nextPipeline: "entrypoint",
+        nextAction: "basicCrudResponse"
+    }
+    rabbitmq.sendTo(dataTmp.pipeline, JSON.stringify(dataTmp)); 
+
+}
+
 module.exports = {
     getMyEvent,
     addEvent,
-    getEventType
+    getEventType,
+    getEvent,
+    editEvent
 };

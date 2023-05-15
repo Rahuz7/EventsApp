@@ -19,6 +19,7 @@ import QueryAccess from "./components/queryAccess.component"
 import GiveAccess from "./components/giveAccess.component"
 import EventDashboard from "./components/eventDashboard.component"
 import CreateEventForm from "./components/createEventForm.component";
+import EditEventForm from "./components/editEventForm.component";
 import Cart from "./components/cart.component";
 import './styles/global.css';
 //const socket = io.connect("http://localhost:8001");
@@ -78,8 +79,8 @@ function App() {
                     <Route path="/event/access/activate" element={<GiveAccess />} />
                     <Route path="/dashboard/event" element={<EventDashboard />} />
                     <Route path="/dashboard/event/new" element={<CreateEventForm />} />
+                    <Route path="/dashboard/event/edit/:id" element={<EditEventForm />} />
                     <Route path="/cart" element={<Cart />} />
-                    
               </Routes>
               <Footer />
           </div>

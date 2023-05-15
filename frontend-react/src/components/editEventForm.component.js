@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect  } from 'react';
 import '../styles/form.css';
 import '../styles/buttonEvent.css';
 import socket from '../Socket';
 import Decimal from 'decimal.js';
 import Send from '../SendMessage';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,useParams  } from 'react-router-dom';
 
-const CreateEventForm = () => {
+const EditEventForm = () => {
+    const { id } = useParams();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [location, setLocation] = useState('');
@@ -28,6 +29,7 @@ const CreateEventForm = () => {
     navigate("/dashboard/event")
   }
 
+
   useEffect(() => {
     const fetchEventTypes = async () => {
       
@@ -41,6 +43,7 @@ const CreateEventForm = () => {
         setIsLoading(true);
 
 
+        Send("getEvent", {id:id}, socket)
         Send("getEventType", {pageNumber:1, pageSize:10}, socket)
         // Effectuer la requête pour récupérer les event types depuis l'API
        // const response = await fetch('https://example.com/api/eventTypes');
@@ -87,6 +90,10 @@ const CreateEventForm = () => {
   };
 
   const handleEventTypeChange = (event) => {
+    console.log('event:', event.target.value)
+    if (event.target.value && isNaN(event.target.value)) {
+        return;
+    }
     setSelectedEventType(parseInt(event.target.value));
   };
   
@@ -105,6 +112,7 @@ const CreateEventForm = () => {
 
     // Effectuer une action avec les données du formulaire
     const formData = {
+      id,
       title,
       description,
       eventType: selectedEventType,
@@ -115,8 +123,9 @@ const CreateEventForm = () => {
       place
     };
 
-    console.log(formData);
-    Send("addEvent", formData, socket)
+    console.log('FORMAT DATA', formData);
+    Send("editEvent", formData, socket)
+   
     // Réinitialiser le formulaire
     setTitle('');
     setDescription('');
@@ -142,17 +151,37 @@ const CreateEventForm = () => {
       }
       
     });
-    socket.on("get-collection-response", (data) => {
+    socket.on("get-item-response", (data) => {
       console.log("data", data)
       console.log("JSON.stringify(data)", JSON.stringify(data))
       if (data.success == true) {
-        setEventTypes(data.events);
+        //setEventTypes(data.events);
+        setTitle(data.event.title);
+        setDescription(data.event.description);
+        setLocation(data.event.location);
+        setDateDebut(data.event.dateDebut);
+        setDateFin(data.event.dateFin);
+        setPrice(data.event.price);
+        setPlace(data.event.place);
+        setSelectedEventType(data.event.event_type.id)
         setMessage(data.message);
 
       } else {
         setMessage(data.message);
       }
       
+    });
+    socket.on("get-collection-response", (data) => {
+        console.log("data", data)
+        console.log("JSON.stringify(data)", JSON.stringify(data))
+        if (data.success == true) {
+          setEventTypes(data.events);
+          setMessage(data.message);
+  
+        } else {
+          setMessage(data.message);
+        }
+        
     });
     socket.on("fetch-credential", (data) => {
       console.log("data", data)
@@ -173,10 +202,22 @@ const CreateEventForm = () => {
     });
   }, [socket]);
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    
+    if (isNaN(date.getTime())) {
+      return ''; // La valeur de la date n'est pas valide, renvoyer une chaîne vide
+    }
+  
+    const formattedDate = date.toISOString().split('T')[0];
+    return formattedDate;
+  };
+
 
   return (
+
     <div className='login-content-container'>
-       <h1>Créer un évènement</h1>
+        <h1>Editer évènement</h1>
       <form className='form' onSubmit={createEvent}>
       <label>
         Titre:
@@ -234,7 +275,7 @@ const CreateEventForm = () => {
       </label>
         <input
           type="date"
-          value={dateDebut}
+          value={formatDate(dateDebut)}
           onChange={(e) => setDateDebut(e.target.value)}
           required
         />
@@ -245,7 +286,7 @@ const CreateEventForm = () => {
       </label>
         <input
           type="date"
-          value={dateFin}
+          value={formatDate(dateFin)}
           onChange={(e) => setDateFin(e.target.value)}
           required
         />
@@ -277,11 +318,10 @@ const CreateEventForm = () => {
 
       <br />
       <button onClick={returnToDashboard} class="button-event">Retour</button> 
-      <button onClick={createEvent} class="button-event">Créer mon évènement</button>
-      
+      <button onClick={createEvent} class="button-event">Editer mon évènement</button> 
     </form>
     </div>
   );
 };
 
-export default CreateEventForm;
+export default EditEventForm;
