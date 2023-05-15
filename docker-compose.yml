@@ -22,7 +22,8 @@ services:
       MYSQL_USER: databases
       MYSQL_PASSWORD: databases
       MYSQL_ROOT_PASSWORD: databases
-      MYSQL_DATABASE: databases
+    volumes: 
+      - ./init:/docker-entrypoint-initdb.d
     healthcheck:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
       timeout: 10s
@@ -33,12 +34,16 @@ services:
       - backend
 
   payment:
-    build: ./payment-service/
+    build: 
+      context: ./
+      dockerfile: ./payment-service/Dockerfile
     volumes:
       - ./payment-service:/app
     depends_on:
-      - rabbitmq
-      - databases
+       databases:
+          condition: service_healthy
+       rabbitmq:
+          condition: service_healthy
     ports:
       - "8005:6000"
     networks:
@@ -49,20 +54,41 @@ services:
     volumes:
       - ./email-service:/app
     depends_on:
-      - rabbitmq
-      - databases
+        rabbitmq:
+          condition: service_healthy
+        mailhog:
+          condition: service_healthy
     ports:
       - "8004:6000"
     networks:
       - backend
 
+  mailhog:
+    image: mailhog/mailhog
+    container_name: mailhog
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8025"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    networks:
+      - backend
+
   event:
-    build: ./events-service/
+    build:
+      context: ./
+      dockerfile: ./events-service/Dockerfile
     volumes:
       - ./events-service:/app
     depends_on:
-      - rabbitmq
-      - databases
+        databases:
+          condition: service_healthy
+        rabbitmq:
+          condition: service_healthy
     ports:
       - "8003:6000"
     networks:
@@ -70,12 +96,16 @@ services:
 
 
   user:
-    build: ./users-service/
+    build: 
+      context: ./
+      dockerfile: ./users-service/Dockerfile
     volumes:
       - ./users-service:/app
     depends_on:
-      - rabbitmq
-      - databases
+        databases:
+          condition: service_healthy
+        rabbitmq:
+          condition: service_healthy
     ports:
       - "8002:6000"
     networks:
@@ -92,8 +122,8 @@ services:
       - RABBITMQ_DEFAULT_PASS=guest
     healthcheck:
       test: rabbitmq-diagnostics -q ping
-      interval: 10s
-      timeout: 10s
+      interval: 20s
+      timeout: 20s
       retries: 3
     networks:
       - backend
@@ -101,22 +131,24 @@ services:
 
   entrypoint:
     build: ./entrypoint/
+    container_name: entrypoint
     volumes:
       - ./entrypoint:/app
     depends_on:
-      - rabbitmq
+      rabbitmq:
+        condition: service_healthy
     ports:
       - "8001:6000"
     networks:
       - backend
 
   front:
-    build: ./frontend/
-    container_name: react-front
+    build: ./frontend-react/
+    container_name: frontend-react
     volumes:
-      - ./frontend/cypress/videos:/usr/src/app/cypress/videos
+      - ./frontend-react/cypress/videos:/usr/src/app/cypress/videos
     ports:
-      - "8000:6000"
+      - "8000:3000"
     command: npm start
     networks:
       - backend

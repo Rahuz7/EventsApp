@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Demande accès organisateur</title>
+</head>
+<body>
+<div style="max-width: 600px; margin: 0 auto;">
+    <header style="background-color: #f2f2f2; padding: 20px;">
+        <h1 style="margin: 0;">Demande accès organisateur</h1>
+    </header>
+    <main style="background-color: #fff; padding: 20px;">
+        <p>Demande accès organisateur pour le compte associé à <%= email %>,</p>
+        <p>Valider la demande: <a href="http://localhost:8000/event/access/activate?token=<%= token %>">Valider</a></p>
+    </main>
+    <footer style="background-color: #f2f2f2; padding: 20px;">
+        <p>Message envoyé par : Bot mail-api</p>
+    </footer>
+</div>
+</body>
+</html>
