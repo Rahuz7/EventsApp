@@ -27,7 +27,7 @@ const EventList = () => {
     { id: 39, title: 'Projection de film en plein air', date: '25/06/2023 - 20:30', location: 'Montpellier', price: '$8', image: 'https://via.placeholder.com/150' },
     { id: 40, title: 'Projection de film en plein air', date: '25/06/2023 - 20:30', location: 'Montpellier', price: '$8', image: 'https://via.placeholder.com/150' },
   
-];
+  ];
 
 
   const handlePageChange = (pageNumber) => {

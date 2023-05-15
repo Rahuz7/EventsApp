@@ -1,0 +1,55 @@
+
+  
+  .events-desc {
+    position: relative;
+  }
+
+  .events-text h1 {
+    color: #3096B7;
+    font-size: 100px;
+    letter-spacing: -2px;
+    line-height: 120%;
+    font-weight: 700;
+  }
+  
+  .events-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    width: 80%;
+    color: black;
+    font-size: 22px;
+  }
+  
+  .events-list {
+    position: relative;
+  }
+
+  .events-list-text h2 {
+    color: #3096B7;
+    font-size: 48px;
+    letter-spacing: -2px;
+    line-height: 120%;
+    font-weight: 700;
+    text-align: left;
+  }
+  
+  .events-list-text {
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    width: 80%;
+    color: black;
+    font-size: 22px;
+  }
+  
+  .events-list img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  

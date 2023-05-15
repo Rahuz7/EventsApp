@@ -1,0 +1,97 @@
+.event-list {
+    padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .event-card {
+    width: 250px;
+    height: 425px;
+    margin: 10px;
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #E5E3E3;
+    overflow: auto;
+    position: relative;
+  }
+  
+  .event-card img {
+    width: 250px;
+    max-width: 100%;
+    height: auto;
+  }
+  
+  .event-card h3 {
+    margin: 0 0 10px;
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
+  .event-card p {
+    margin: 0 0 5px;
+    font-size: 16px;
+    line-height: 1.4;
+  }
+
+  .event-card .event-location {
+    font-style: italic;
+  }
+  
+  .event-card .event-date {
+    color: #3096B7;
+  }
+  
+  .event-card .event-price {
+    font-weight: bold;
+  }
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+    margin: 20px;
+    list-style: none;
+  }
+
+  .pagination li {
+    text-decoration: none;
+    margin: 10px;
+  }
+
+  .page-link span {
+    display: none;
+  }
+
+  .page-link {
+    color: black;
+    text-decoration: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .page-link:focus, .page-link:hover {
+    z-index: 2;
+    color: #fff;
+    background-color: #3096B7;
+    border-color: #3096B7;
+  }
+  
+  .page-item.active .page-link {
+    z-index: 1;
+    color: #fff;
+    background-color: #3096B7;
+    border-color: #3096B7;
+  }
+
+  .event-card-cart {
+    position: absolute;
+    bottom:10px;
+    right: 10px;
+    display: flex;
+    vertical-align:baseline;
+    justify-content: flex-end;
+  }

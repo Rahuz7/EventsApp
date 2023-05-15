@@ -6,6 +6,8 @@ import '../styles/navbar.css';
 import LoginBtn from './loginBtn.component';
 import SignupBtn from './signupBtn.component';
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import Cart from './cart.component.js';
 const Navbar = ({isLoggedIn}) => {
         const navigate = useNavigate();
 
@@ -32,7 +34,9 @@ const Navbar = ({isLoggedIn}) => {
                 <div className='desktop-menu'>
                   <nav className='nav'> 
                     <a onClick={navigateToAccessEvent}>Je suis organisateur</a>
-                    <a href='#'>Panier</a>
+                    <Link to="/cart">Panier</Link>
+
+                    {/* <a href='#'>Panier</a> */}
                     <a href='#'>Calendrier</a>
                   </nav>
                 </div>
