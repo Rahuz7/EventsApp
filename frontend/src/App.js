@@ -5,6 +5,7 @@ import SignupContent from './components/signupContent.component';
 import Home from './components/home.component';
 import Footer from './components/footer.component';
 import EventCalendar from './components/eventCalendar.component';
+import OrganizerForm from './components/organizerForm.component';
 import './App.css';
 
 
@@ -20,6 +21,7 @@ class App extends Component {
       showSignupContent: false,
       showHome: true,
       showEventsContent: false,
+      showOrganizerContent: false,
     }
   }
 
@@ -29,6 +31,17 @@ class App extends Component {
       showSignupContent: false,
       showHome: false,
       showEventsContent: false,
+      showOrganizerContent: false,
+    });
+  }
+
+  handleOrganizerClick = () => {
+    this.setState({ 
+      showLoginContent: false,
+      showSignupContent: false,
+      showHome: false,
+      showEventsContent: false,
+      showOrganizerContent: true,
     });
   }
 
@@ -38,6 +51,7 @@ class App extends Component {
       showSignupContent: false,
       showLoginContent: false,
       showHome: false,
+      showOrganizerContent: false,
     });
   }
 
@@ -47,6 +61,7 @@ class App extends Component {
       showLoginContent: false,
       showHome: false,
       showEventsContent: false,
+      showOrganizerContent: false,
     });
   } 
 
@@ -56,6 +71,7 @@ class App extends Component {
       showLoginContent: false,
       showHome: true,
       showEventsContent: false,
+      showOrganizerContent: false,
     });
   }
 
@@ -67,6 +83,7 @@ class App extends Component {
           onSignupClick={this.handleSignupClick} 
           onHomeClick={this.handleHomeClick}
           onEventsClick={this.handleEventsClick}
+          onOrganizerClick={this.handleOrganizerClick}
           showLoginContent={this.state.showLoginContent}
           showSignupContent={this.state.showSignupContent}
         />
@@ -75,6 +92,7 @@ class App extends Component {
           { this.state.showSignupContent && <SignupContent /> }
           { this.state.showHome && < Home onEventsClick={this.handleEventsClick} /> }
           { this.state.showEventsContent && < EventCalendar /> }
+          { this.state.showOrganizerContent && < OrganizerForm /> }
         </div>
         <Footer />
       </div>

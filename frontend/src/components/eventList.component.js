@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import '../styles/eventList.css';
 import Pagination from 'react-bootstrap/Pagination';
-import cartIcon from '../icons/ajout-panier.svg';
+import cartIcon from '../assets/ajout-panier.svg';
 
 
 export default class EventList extends Component {

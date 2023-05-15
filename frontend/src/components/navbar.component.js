@@ -13,7 +13,7 @@ export default class NavBar extends Component {
                 <a href='#' className='title' onClick={this.props.onHomeClick}>EV-France</a>
                 <div className='desktop-menu'>
                   <nav className='nav'> 
-                    <a href='#'>Je suis organisateur</a>
+                    <a href='#' onClick={this.props.onOrganizerClick}>Je suis organisateur</a>
                     <a href='#'>Panier</a>
                     <a href='#' onClick={this.props.onEventsClick}>Calendrier</a>
                   </nav>

@@ -5,7 +5,7 @@ export default class LoginBtn extends Component {
     render() {
         return (
             <button className='login' onClick={this.props.onClick} >
-                <a href='#'>Login</a>
+                <a href='#'>Connexion</a>
             </button>
         )
     }

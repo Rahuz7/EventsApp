@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import '../styles/home.css';
 import '../styles/button.css';
-import wallpaper1 from '../icons/wallpaper1.jpeg';
+import wallpaper1 from '../assets/wallpaper1.jpeg';
  
 
 export default class Home extends Component {

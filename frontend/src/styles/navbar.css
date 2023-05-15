@@ -30,7 +30,9 @@ header a {
 
 .logo {
   margin-left: 32px;
-  width: 100px;
+  /* width: 100px; */
+  width: 60px;
+  align-items: center;
   object-fit: cover;
 }
 

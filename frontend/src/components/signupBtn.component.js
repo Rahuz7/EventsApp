@@ -5,7 +5,7 @@ export default class SignupBtn extends Component {
     render() {
         return (
             <button className='register' onClick={this.props.onClick}>
-                <a href='#'>Register</a>
+                <a href='#'>Inscription</a>
             </button>
         )
     }

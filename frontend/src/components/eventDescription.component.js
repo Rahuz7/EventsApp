@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import wallpaper1 from '../icons/wallpaper1.jpeg';
+import wallpaper1 from '../assets/wallpaper1.jpeg';
 import '../styles/home.css';
 import '../styles/eventDescription.css';
 
