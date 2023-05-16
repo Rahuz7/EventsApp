@@ -4,6 +4,7 @@ import '../styles/buttonEvent.css';
 import '../styles/eventForm.css';
 import socket from '../Socket';
 import Decimal from 'decimal.js';
+import socket from '../Socket';
 import Send from '../SendMessage';
 import { useNavigate } from 'react-router-dom';
 
