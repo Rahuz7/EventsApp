@@ -21,6 +21,7 @@ import EventDashboard from "./components/eventDashboard.component"
 import CreateEventForm from "./components/createEventForm.component";
 import EditEventForm from "./components/editEventForm.component";
 import Cart from "./components/cart.component";
+import PaymentForm from "./components/paymentForm.component";
 import './styles/global.css';
 //const socket = io.connect("http://localhost:8001");
 //const socket = "hello";

@@ -82,7 +82,7 @@ const Cart = ({ activerFonctionC }) => {
               <div class="total-items">Nombre d'article: <span id="total-items">{nbItem}</span></div>
               <div class="total-items">Total d'articles: <span id="total-items">{nbSubItem}</span></div>
               <div class="total-price">Prix total: <span id="total-price">{totalPrice}€</span></div>
-              <button class="checkout-btn">Valider</button>
+              <Link to="/payment" className="checkout-btn">Valider</Link>
           </div>
         </div>
         

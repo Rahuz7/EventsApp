@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import socket from '../Socket';
 import '../styles/form.css';
+import keyboard from '../icons/keyboard.jpg';
+
 const Signup = () => {
 
     const [username, setUsername] = useState('');
@@ -29,6 +31,7 @@ const Signup = () => {
 
         return (
             <div className='signup-content-container'>
+              <img className="form-background" src={keyboard}/>
             <form className='form' >
               <label htmlFor='username'>Nom d'utilisateur :</label>
               <input

@@ -4,11 +4,11 @@ import '../styles/profileIcon.css';
 const ProfileIcon = () => {
         return (
             <div className="dropdown-profile-container">
-                <img className='dropdown-profile' src='/icons/user-profile.png' alt='profile icon' width='20px' height='20px'/>
+                <img className='dropdown-profile' src='/icons/user-profile.png' alt='profile icon' width='50px' height='50px'/>
                 <div className="dropdown-content">
-                    <a href="#">Link 1</a>
-                    <a href="#">Link 2</a>
-                    <a href="#">Link 3</a>
+                    <a href="#">Dashboard Events</a>
+                    <a href="#">Dashboard Organizer</a>
+                    <a href="#">Log-out</a>
                 </div>
             </div>
         )

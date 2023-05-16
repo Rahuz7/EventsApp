@@ -1,10 +1,15 @@
-.login-content-container { 
-    padding-top: 100px;
-    padding-bottom: 50px;
+  .login-content-container { 
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100%;
+    height: 80vh;
+}
+
+.form-background {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 50%;
 }
 
 .signup-content-container {
@@ -14,10 +19,21 @@
     height: 80vh;
 }
 
+.organizer-content-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+}
+
   .form {
+    position: absolute;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #E5E3E3;
   }
   
   .form label {
@@ -28,6 +44,15 @@
   }
   
   .form input {
+    width: 300px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 20px;
+  }
+
+  .form textarea {
+    resize: none;
     width: 300px;
     padding: 10px;
     border: 1px solid #ccc;
@@ -46,13 +71,14 @@
     align-self: center;
   }
 
-  .submit-form {
-    width: 120px;
-    background-color: #3096B7;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 10px;
-    margin-top: 20px;
-    align-self: center;
-  }
+.form .submit-form {
+  width: 120px;
+  background-color: #3096B7;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  margin-top: 20px;
+  align-self: center;
+}
+

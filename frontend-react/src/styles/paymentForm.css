@@ -1,0 +1,88 @@
+  
+  .payment-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+  }
+
+  .payment-form-section {
+    display: flex;
+    border-radius: 5px;
+    background-color: #E5E3E3;
+    width: 80%;
+    max-width: 1000px;
+  }
+  
+  .payment-left-section,
+  .payment-right-section {
+    flex: 1;
+    padding: 40px;
+  }
+    
+    .payment-container .payment-right-section form{
+    padding-top: 30px;
+    }
+    
+    .payment-container h2 {
+    text-align: center;
+    font-size: 20px;
+    }
+    
+    .payment-container .form-group {
+    margin-bottom: 10px;
+    }
+    
+    .payment-container label {
+    display: block;
+    }
+    
+    .payment-container input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    }
+    
+    .payment-container .input-with-icon {
+    position: relative;
+    }
+    
+    .payment-container .input-with-icon svg {
+    position: absolute;
+    top: 50%;
+    right: 0px;
+    transform: translateY(-50%);
+    color: #3096B7;
+    height: 20px;
+    }
+    
+    .payment-container .payment-centered-button {
+    text-align: center;
+    margin-top: 20px;
+    }
+    
+    .payment-centered-button button {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background-color: #3096B7;
+    width: 120px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    }  
+
+    .payment-form-background {
+        position: fixed;
+        top:0;
+        left:0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        object-fit: cover;
+        opacity: 50%;
+    }
