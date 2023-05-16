@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/form.css';
 import '../styles/buttonEvent.css';
-import Decimal from 'decimal.js';
+import '../styles/eventForm.css';
 import socket from '../Socket';
+import Decimal from 'decimal.js';
 import Send from '../SendMessage';
 import { useNavigate } from 'react-router-dom';
 
@@ -175,113 +176,61 @@ const CreateEventForm = () => {
 
 
   return (
-    <div className='login-content-container'>
-       <h1>Créer un évènement</h1>
-      <form className='form' onSubmit={createEvent}>
-      <label>
-        Titre:
-      </label>
-        <input
-          type="text"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          required
-        />
-     
-      <br />
-      <label>
-        Event Type:
-      </label>
-        <select value={selectedEventType} onChange={handleEventTypeChange} required>
-          {isLoading ? (
-            <option>Loading...</option>
-          ) : (
-            <>
-              <option value="">Sélectionnez un event type</option>
-              {eventTypes.map((eventType) => (
-                <option key={eventType.id} value={eventType.id}>
-                  {eventType.libelle}
-                </option>
-              ))}
-            </>
-          )}
-        </select>
-      
-      <br />
-      <label>
-        Description:
-      </label>
-        <textarea
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          required
-        ></textarea>
-
-      <br />
-      <label>
-        Emplacement:
-      </label>
-        <input
-          type="text"
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
-          required
-        />
-  
-      <br />
-      <label>
-        Date de début:
-      </label>
-        <input
-          type="date"
-          value={dateDebut}
-          onChange={(e) => setDateDebut(e.target.value)}
-          required
-        />
-
-      <br />
-      <label>
-        Date de fin:
-      </label>
-        <input
-          type="date"
-          value={dateFin}
-          onChange={(e) => setDateFin(e.target.value)}
-          required
-        />
-    
-      <br />
-      <label>
-        Prix:
-      </label>
-        <input
-          type="text" // Utiliser le type "text" au lieu de "number" pour permettre la saisie de décimales
-          value={price}
-          onChange={handlePriceChange}
-          required
-        />
-  
-      <br />
-      <label>
-        Nombre de places:
-      </label>
-        <input
-          type="text" // Utiliser "text" au lieu de "number"
-          value={place}
-          onChange={handleNbPlaceChange}
-          inputMode="numeric" // Spécifier le mode de saisie numérique
-          pattern="\d*" // Limiter la saisie aux chiffres uniquement
-          maxLength={5} // Limiter le nombre de chiffres à 5
-          required
-        />
-
-      <br />
-      <button onClick={returnToDashboard} class="button-event">Retour</button> 
-      <button onClick={createEvent} class="button-event">Créer mon évènement</button>
-      
-    </form>
+    <div className="event-form-container">
+      <img src="/icons/wallpaper1.jpeg" alt="background image" className="event-form-background" />
+      <h1>Créer un évènement</h1>
+      <div className="event-form-section">
+        <div className="event-form-left-section">
+          <form className="event-form" onSubmit={createEvent}>
+            <div className="event-form-group">
+              <label for="title">Titre:</label>
+              <input type="text" id="title" name="title" value={title} onChange={(e) => setTitle(e.target.value)} required />
+            </div>
+            <div className="event-form-group">
+              <label for="event-type">Event Type:</label>
+              <select id="event-type" name="event-type" value={selectedEventType} onChange={handleEventTypeChange} required> {isLoading ? ( <option>Loading...</option> ) : (
+                <> <option value="">Sélectionnez un event type</option> {eventTypes.map((eventType) => (
+                  <option key={eventType.id} value={eventType.id}> {eventType.libelle} </option>
+                    ))} </> )} </select>
+            </div>
+            <div className="event-form-group">
+              <label for="description">Description:</label>
+              <textarea id="description" name="description" value={description} onChange={(e) => setDescription(e.target.value)} required ></textarea>
+            </div>
+            <div className="event-form-group">
+              <label for="emplacement">Emplacement:</label>
+              <input type="text" id="emplacement" name="emplacement" value={location} onChange={(e) => setLocation(e.target.value)} required />
+            </div>
+          </form>
+        </div>
+        <div className="event-form-right-section">
+          <form>
+            <div className="event-form-group">
+              <label for="date-debut">Date de début:</label>
+              <input id="date-debut" name="date-debut" type="date" value={dateDebut} onChange={(e) => setDateDebut(e.target.value)} required />
+            </div>
+            <div className="event-form-group">
+              <label for="date-fin">Date de fin:</label>
+              <input id="date-fin" name="date-fin" type="date" value={dateFin} onChange={(e) => setDateFin(e.target.value)} required />
+            </div>
+            <div className="event-form-group">
+              <label for="price">Prix:</label>
+              <input id="price" name="price" type="text" value={price} onChange={handlePriceChange} required />
+            </div>
+            <div className="event-form-group">
+              <label for="placeNumber">Nombre de places:</label>
+              <input id="placeNumber" name="placeNumber" type="text" value={place} onChange={handleNbPlaceChange} inputMode="numeric" pattern="\d*" maxLength={5} required />
+            </div>
+          </form>
+        </div>
+      </div>
+      <div className="event-form-button">
+        <button onClick={returnToDashboard} class="button-event-cancel">Retour</button> 
+        <button onClick={createEvent} class="button-event-create">Créer</button>
+      </div>
     </div>
   );
+
 };
 
 export default CreateEventForm;

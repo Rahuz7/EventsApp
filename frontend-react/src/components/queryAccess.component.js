@@ -3,6 +3,7 @@ import '../styles/form.css';
 import socket from '../Socket';
 import Send from '../SendMessage';
 import { useNavigate } from 'react-router-dom';
+import eventManager from '../icons/events-manager.png';
 
 const QueryAccess = () => {
 
@@ -61,8 +62,9 @@ const QueryAccess = () => {
         }
         return (
             <div className='login-content-container'>
-            <h1> Je veux devenir organisateur</h1>
+              <img className="form-background" src={eventManager}/>
             <form className='form' onSubmit={handleSubmit}>
+              <h1> Je veux devenir organisateur</h1>
               <button className="submit-form" type="submit">
                 Envoyer ma demande
               </button>  

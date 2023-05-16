@@ -1,0 +1,95 @@
+  
+  .event-form-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+  }
+
+  .event-form-section {
+    display: flex;
+    border-radius: 5px;
+    background-color: #E5E3E3;
+    width: 80%;
+    max-width: 1000px;
+  }
+  
+  .event-form-left-section,
+  .event-form-right-section {
+    flex: 1;
+    padding: 40px;
+  }
+    .event-form-container h1 {
+        color: #3096B7;
+    }
+    
+    .event-form-container .event-form-group {
+    margin-bottom: 10px;
+    }
+    
+    .event-form-container label {
+    display: block;
+    }
+    
+    .event-form-container input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    }
+
+    .event-form-container select {
+        width: 106%;
+        padding:10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        color: #3096B7;
+        background-color: white;
+    }
+
+    .event-form-container textarea {
+        width: 100%;
+        height: 35px;
+        padding: 10px;
+        resize: none;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+
+    .event-form-container input[type="date"] {
+        width: 100%;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        color: #3096B7;
+        }
+
+    
+    .event-form-container .event-form-button {
+    text-align: center;
+    margin-top: 20px;
+    }
+    
+    .event-form-button button {
+    text-align: center;
+    margin: 20px;
+    background-color: #3096B7;
+    width: 120px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    }  
+
+    .event-form-background {
+        position: fixed;
+        top:0;
+        left:0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        object-fit: cover;
+        opacity: 50%;
+    }
