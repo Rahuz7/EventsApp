@@ -11,8 +11,7 @@ const  GiveAccess = () => {
     const { token, uuid } = params;
 
 
-    console.log('id :', token);
-    console.log('token :', uuid);
+
     socket.emit("giveAccess", { token });
 
 
@@ -20,8 +19,7 @@ const  GiveAccess = () => {
         identity.id = data.id;
         identity.token = data.token;
         identity.userName = data.userName;
-        console.log("data", data)
-        console.log("JSON.stringify(data)", JSON.stringify(data))
+
         if (data.success == true) {
           setMessage(data.message);
         } else {

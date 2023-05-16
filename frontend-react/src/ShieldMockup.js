@@ -6,7 +6,7 @@ import Send from './Send';
 const Composant1 = () => {
     const navigate = useNavigate();
 
-    // Messages States
+   
     const [message, setMessage] = useState("");
     const [messageReceived, setMessageReceived] = useState("");
   

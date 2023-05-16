@@ -32,17 +32,17 @@ const Cart = ({ activerFonctionC }) => {
   }, []);
 
   const handleChange = (ev, id) => {
-    console.log(ev)
+
     const newAmount = parseInt(ev.target.value);
     if (newAmount <= 0) {
-      // La valeur est 0, vous pouvez gérer cette situation comme vous le souhaitez
+
       return;
     }
     const eventIndex = events.findIndex(event => event.id === id);
     if ((newAmount > events[eventIndex].place)) {
       return
     }
-    console.log(newAmount ,id)
+
     if (eventIndex !== -1) {
       const updatedEvents = [...events];
       updatedEvents[eventIndex] = { ...updatedEvents[eventIndex], amount: newAmount };
@@ -50,7 +50,7 @@ const Cart = ({ activerFonctionC }) => {
     }
     const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
     const product = events[eventIndex]
-    console.log(product)
+
     const existingItemIndex = cartItems.findIndex(item => item.id === product.id);
   
     if (existingItemIndex === -1) {
@@ -77,17 +77,17 @@ const Cart = ({ activerFonctionC }) => {
     localStorage.setItem('cartItems', JSON.stringify(cartItems));
     const total = cartItems.reduce((acc, item) => acc + item.amount, 0);
     activerFonctionC(total);
-    console.log(cartItems)
+
   };
 
   const handleDelete = (ev, id) => {
-    console.log('handleDelete')
+    
     const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
 
     // Supprimer l'objet avec l'ID correspondant
     const updatedArray = cartItems.filter(obj => obj.id !== id);
     
-    console.log(updatedArray)
+  
     let totalPriceTmp = 0;
     let nbItemTmp = updatedArray.length;
     let nbSubItemTmp = 0;
@@ -110,25 +110,25 @@ const Cart = ({ activerFonctionC }) => {
 
 
   return (
-    <div class="cart-container">
-        <div class="cart-left-container">
+    <div className="cart-container">
+        <div className="cart-left-container">
           {events.map(({ id, title, amount, price, totalPrice }) => (
-            <div key={id} class="event-line">
-              <div class="cart-title">{title}</div>
-              <div class="cart-quantity">
+            <div key={id} className="event-line">
+              <div className="cart-title">{title}</div>
+              <div className="cart-quantity">
                 <input type="number" min="1"  value={amount } onChange={(event) => handleChange(event, id)}  />
               </div>
-              <div class="cart-price">{price}</div>
-              <div class="cart-price">{totalPrice}</div>
+              <div className="cart-price">{price}</div>
+              <div className="cart-price">{totalPrice}</div>
               <img className="cart-delete-icon" src={cancelIcon} onClick={(event) => handleDelete(event, id)} alt='supprimer' style={{ width: '30px', height: '30px'}}/>
             </div>
           ))}
         </div>
-        <div class="cart-right-container">
-          <div class="summary">
-              <div class="total-items">Nombre d'article: <span id="total-items">{nbItem}</span></div>
-              <div class="total-items">Total d'articles: <span id="total-items">{nbSubItem}</span></div>
-              <div class="total-price">Prix total: <span id="total-price">{totalPrice}€</span></div>
+        <div className="cart-right-container">
+          <div className="summary">
+              <div className="total-items">Nombre d'article: <span id="total-items">{nbItem}</span></div>
+              <div className="total-items">Total d'articles: <span id="total-items">{nbSubItem}</span></div>
+              <div className="total-price">Prix total: <span id="total-price">{totalPrice}€</span></div>
               <Link to="/payment" className="checkout-btn">Valider</Link>
           </div>
         </div>

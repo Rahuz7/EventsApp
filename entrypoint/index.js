@@ -12,7 +12,7 @@ const amqp = require('amqplib');
 const router = require("./router/router");
 const serviceMap = require("./mapper/mapper");
 
-// Utilisez serviceMap pour accéder aux services chargés
+
 console.log('serviceMap:', serviceMap);
 
 const sessionMiddleware = session({
@@ -66,7 +66,7 @@ async function ecouterMessage() {
     if (serviceMap.hasOwnProperty(data.action)) {
       console.log(`Action '${data.action}' call`);
      data.pipeline = undefined;
-     const { providedData, pipeline, action ,nextPipeline, nextAction } = serviceMap[data.action](data, connectedSockets); // Appelle la fonction appropriée en fonction de l'action
+     const { providedData, pipeline, action ,nextPipeline, nextAction } = serviceMap[data.action](data, connectedSockets); 
      
      console.log("Retour action ", data.action);
      data.action = undefined;

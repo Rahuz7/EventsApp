@@ -10,7 +10,7 @@ const QueryAccess = () => {
         const [message, setMessage] = useState('');
         const [shouldRedirect, setShouldRedirect] = useState(false);
         const navigate = useNavigate();
-        console.log('quert access')
+     
         const handleSubmit = (event) => {
             event.preventDefault();
             Send("grantMeEventOwner", {}, socket)
@@ -30,8 +30,7 @@ const QueryAccess = () => {
         }, []);
         useEffect(() => {
             socket.on("get-grant-query-response", (data) => {
-              console.log("data", data)
-              console.log("JSON.stringify(data)", JSON.stringify(data))
+       
               if (data.success == true) {
                 setMessage(data.message);
 
@@ -41,8 +40,7 @@ const QueryAccess = () => {
               
             });
             socket.on("fetch-credential", (data) => {
-              console.log("data", data)
-              console.log("JSON.stringify(data)", JSON.stringify(data))
+      
               if (data.success == true) {
                 localStorage.setItem("user", JSON.stringify(data));
                 if (data.roles.includes("ROLE_ORGANISATEUR")) {

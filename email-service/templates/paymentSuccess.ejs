@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Titre de l'email</title>
+</head>
+<body><!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Résumé de votre commande</title>
+</head>
+<body>
+<div style="max-width: 600px; margin: 0 auto;">
+    <header style="background-color: #f2f2f2; padding: 20px;">
+        <h1 style="margin: 0;">Résumé de votre commande</h1>
+    </header>
+    <main style="background-color: #fff; padding: 20px;">
+        <p>Bonjour <%= email %>,</p>
+        <p>Vous trouverez ci-dessous un récapitulatif de votre commande :</p>
+        <ul>
+         
+                <li>orderId: <%= orderId %> </li>
+                <li>Nombre Produit: <%= nbItem %> </li>
+          
+        </ul>
+        <p>Le montant total de votre commande est de <%= totalPrice %>€.</p>
+    </main>
+    <footer style="background-color: #f2f2f2; padding: 20px;">
+        <p>Merci pour votre commande !</p>
+    </footer>
+</div>
+</body>
+</html>

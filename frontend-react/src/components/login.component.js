@@ -31,8 +31,7 @@ const Login = ({onLogin}) => {
               identity.id = data.id;
               identity.token = data.token;
               identity.userName = data.userName;
-              console.log("data", data)
-              console.log("JSON.stringify(data)", JSON.stringify(data))
+ 
               if (data.success == true) {
                 localStorage.setItem("user", JSON.stringify(data));
                 setMessage(data.message);

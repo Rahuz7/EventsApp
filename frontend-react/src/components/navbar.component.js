@@ -9,7 +9,7 @@ import SignupBtn from './signupBtn.component';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import Cart from './cart.component.js';
-const Navbar = ({isLoggedIn, fonctionCActivee }) => {
+const Navbar = ({isLoggedIn, fonctionCActivee, logout }) => {
         const navigate = useNavigate();
         const [amount, setAmount] = useState(0);
 
@@ -29,7 +29,7 @@ const Navbar = ({isLoggedIn, fonctionCActivee }) => {
       
         function maFonctionDeC(fonctionCActivee) {
           setAmount(fonctionCActivee)
-          console.log("Fonction de C activée depuis B !", fonctionCActivee);
+        
         }
 
 
@@ -39,13 +39,13 @@ const Navbar = ({isLoggedIn, fonctionCActivee }) => {
 
         const navigateToAccessEvent = () => {
           const user = JSON.parse(localStorage.getItem('user'));
-          console.log(user)
+         
           if (!user) {
-            console.log('condition', user)
+           
             navigate('/login');
             return null
           }
-          console.log("pass")
+       
           navigate('/event/access');
        };
         return (
@@ -58,14 +58,14 @@ const Navbar = ({isLoggedIn, fonctionCActivee }) => {
                     <a onClick={navigateToAccessEvent}>Je suis organisateur</a>
                     <Link to="/cart">Panier({amount})</Link>
 
-                    {/* <a href='#'>Panier</a> */}
+                 
                     <a href='#'>Calendrier</a>
                   </nav>
                 </div>
                 
                     {isLoggedIn ? (
                             <div className='btn-group'>
-                                <ProfileIcon />              
+                                <ProfileIcon logout={logout}  />              
                             </div>
                         ) : (
                         <div className='btn-group'>
@@ -73,7 +73,7 @@ const Navbar = ({isLoggedIn, fonctionCActivee }) => {
                             <SignupBtn/>
                          </div>
                     )}
-                  {/* <ProfileIcon /> */}
+                 
               
               </header> 
             </div>

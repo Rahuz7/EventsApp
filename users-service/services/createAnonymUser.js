@@ -89,7 +89,7 @@ const  createAnonymUser = async (data) => {
 
             providedData = data;
             providedData.success = true;
-            providedData.userUuid = userAnonymInfo.userUuid
+            providedData.userUuid = userAnonymInfo.uuid
             providedData.message = "Info compte récupérée  avec succés."
             return {
                 providedData,
@@ -139,7 +139,7 @@ const  createAnonymUser = async (data) => {
 
             providedData = data;
             providedData.success = true
-            providedData.userUuid = userInfo.userUuid
+            providedData.userUuid = userInfo.uuid
             providedData.message = "Info compte récupérée  avec succés."
             return {
                 providedData,

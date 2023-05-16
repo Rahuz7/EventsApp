@@ -6,7 +6,7 @@ import identity from "./Identity"
 const Password = () => {
     const navigate = useNavigate();
 
-    // Messages States
+
  
   
   

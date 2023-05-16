@@ -57,7 +57,7 @@ const  editEvent = async (data) => {
       });
 
       if (event) {
-        // Mettre à jour les attributs de l'événement existant
+       
         event.ownerUuid = decodedUuid;
         event.title = data.title;
         event.description = data.description;
@@ -68,17 +68,15 @@ const  editEvent = async (data) => {
         event.place = data.place;
         event.eventTypeId = data.eventType;
       
-        // Enregistrer les modifications dans la base de données
+     
         await event.save();
       
-        // Event édité avec succès
-        // ...
+  
       } else {
         return {
             providedData
           }
-        // L'événement n'a pas été trouvé
-        // ...
+   
       }
  
       providedData.success = true;

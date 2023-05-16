@@ -11,6 +11,8 @@ const PaymentForm = () => {
   const [totalPrice, setTotalPrice] = useState(0)
   const [nbItem, setNbItem] = useState(0)
   const [nbSubItem, setNbSubItem] = useState(0)
+  const [formSubmitted, setFormSubmitted] = useState(false);
+  const [message, setMessage] = useState('');
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -28,7 +30,7 @@ const PaymentForm = () => {
     if (user && user.email) {
       setFormData((prevFormData) => ({
         ...prevFormData,
-        email: user.email, // Valeur programmée pour le champ email
+        email: user.email, 
       }));
     }
     let storedCartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
@@ -46,17 +48,33 @@ const PaymentForm = () => {
     setNbItem(nbItemTmp)
   }, []);
 
+  useEffect(() => {
+    socket.on("get-payment-response", (data) => {
+
+      if (data.success == true) {
+        localStorage.removeItem('cartItems');
+
+        setMessage(data.message);
+      } else {
+        setMessage(data.message);
+      }
+      
+    });
+  }, [socket]);
+
 
   const handleChange = (e) => {
+    
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Utilisez les données du formulaire ici, par exemple :
+
     let user = JSON.parse(localStorage.getItem('user')) || [];
-    Send("payment", { ...formData }, socket)
-    console.log(formData);
+    let storedCartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+    Send("payment", { ...formData, totalPrice, nbItem, nbSubItem, storedCartItems }, socket)
+
   };
 
 
@@ -135,9 +153,11 @@ const PaymentForm = () => {
               <div className="total-price">Prix total: <span id="total-price">{totalPrice}€</span></div>
               <Link to="/cart" className="checkout-btn">Retour</Link>
               <button  onClick={handleSubmit} className="checkout-btn">Payer ma commande</button>
+              {message}
           </div>
         </div>
     </div>
+    
   );
 };
 

@@ -119,6 +119,8 @@ const getAllEvent = (socket, data) => {
 
 }
 
+
+
 module.exports = {
     getMyEvent,
     addEvent,

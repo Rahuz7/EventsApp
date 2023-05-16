@@ -46,9 +46,7 @@ const EditEventForm = () => {
 
         Send("getEvent", {id:id}, socket)
         Send("getEventType", {pageNumber:1, pageSize:10}, socket)
-        // Effectuer la requête pour récupérer les event types depuis l'API
-       // const response = await fetch('https://example.com/api/eventTypes');
-       // const data = await response.json();
+
          const data = [
           {
             id: 1,
@@ -66,11 +64,11 @@ const EditEventForm = () => {
             avareSrc: "C.png"
           }
          ]
-        // Mettre à jour le state avec les event types récupérés
+
         setEventTypes(data);
         setIsLoading(false);
       } catch (error) {
-        console.error('Une erreur s\'est produite lors de la récupération des event types :', error);
+     
         setIsLoading(false);
       }
     };
@@ -85,13 +83,13 @@ const EditEventForm = () => {
     const inputValue = e.target.value;
 
     if (/^\d*\.?\d*$/.test(inputValue)) {
-      // Seulement une valeur décimale est saisie
+ 
       setPrice(inputValue);
     }
   };
 
   const handleEventTypeChange = (event) => {
-    console.log('event:', event.target.value)
+
     if (event.target.value && isNaN(event.target.value)) {
         return;
     }
@@ -99,19 +97,19 @@ const EditEventForm = () => {
   };
   
   const handleNbPlaceChange = (event) => {
-    let inputValue = event.target.value.replace(/\D/g, ''); // Retirer tous les caractères non numériques
-    inputValue = inputValue.slice(0, 5); // Limiter le nombre de chiffres à 5
+    let inputValue = event.target.value.replace(/\D/g, ''); 
+    inputValue = inputValue.slice(0, 5); 
 
-    const newNbPlace = parseInt(inputValue, 10) || 0; // Convertir en nombre ou utiliser 0 si la conversion échoue
-    const maxPlaces = 10000; // Nombre maximum de places autorisé
-    setPlace(Math.min(newNbPlace, maxPlaces)); // Limiter la valeur à maxPlaces
+    const newNbPlace = parseInt(inputValue, 10) || 0;
+    const maxPlaces = 10000; 
+    setPlace(Math.min(newNbPlace, maxPlaces)); 
   };
 
 
   const createEvent = (event) => {
     event.preventDefault();
 
-    // Effectuer une action avec les données du formulaire
+   
     const formData = {
       id,
       title,
@@ -124,10 +122,10 @@ const EditEventForm = () => {
       place
     };
 
-    console.log('FORMAT DATA', formData);
+  
     Send("editEvent", formData, socket)
    
-    // Réinitialiser le formulaire
+   
     setTitle('');
     setDescription('');
     setLocation('');
@@ -141,8 +139,7 @@ const EditEventForm = () => {
 
   useEffect(() => {
     socket.on("get-crud-response", (data) => {
-      console.log("data", data)
-      console.log("JSON.stringify(data)", JSON.stringify(data))
+
       if (data.success == true) {
         
         setMessage(data.message);
@@ -153,10 +150,9 @@ const EditEventForm = () => {
       
     });
     socket.on("get-item-response", (data) => {
-      console.log("data", data)
-      console.log("JSON.stringify(data)", JSON.stringify(data))
+
       if (data.success == true) {
-        //setEventTypes(data.events);
+  
         setTitle(data.event.title);
         setDescription(data.event.description);
         setLocation(data.event.location);
@@ -173,8 +169,7 @@ const EditEventForm = () => {
       
     });
     socket.on("get-collection-response", (data) => {
-        console.log("data", data)
-        console.log("JSON.stringify(data)", JSON.stringify(data))
+
         if (data.success == true) {
           setEventTypes(data.events);
           setMessage(data.message);
@@ -185,8 +180,7 @@ const EditEventForm = () => {
         
     });
     socket.on("fetch-credential", (data) => {
-      console.log("data", data)
-      console.log("JSON.stringify(data)", JSON.stringify(data))
+
       if (data.success == true) {
         localStorage.setItem("user", JSON.stringify(data));
         if (data.roles.includes("ROLE_ORGANISATEUR")) {
@@ -207,7 +201,7 @@ const EditEventForm = () => {
     const date = new Date(dateString);
     
     if (isNaN(date.getTime())) {
-      return ''; // La valeur de la date n'est pas valide, renvoyer une chaîne vide
+      return ''; 
     }
   
     const formattedDate = date.toISOString().split('T')[0];
@@ -264,8 +258,8 @@ const EditEventForm = () => {
         </div>
       </div>
       <div className="event-form-button">
-        <button onClick={returnToDashboard} class="button-event-cancel">Retour</button> 
-        <button onClick={createEvent} class="button-event-create">Mettre à jour</button>
+        <button onClick={returnToDashboard} className="button-event-cancel">Retour</button> 
+        <button onClick={createEvent} className="button-event-create">Mettre à jour</button>
       </div>
     </div>
   );

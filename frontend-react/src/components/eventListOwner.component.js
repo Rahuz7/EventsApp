@@ -10,19 +10,18 @@ const EventListOwner = ({events, handlePagination, count, currentPageNumber }) =
   const [eventsPerPage] = useState(5);
   const [currentPage, setCurrentPage] = useState(currentPageNumber);
   const navigate = useNavigate();
-  console.log(events)
+
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
     handlePagination(pageNumber)
   };
-  //setCurrentPage(currentPageNumber)
-  console.log(currentPageNumber)
+
+
   const indexOfLastEvent = currentPage * eventsPerPage;
   const indexOfFirstEvent = indexOfLastEvent - eventsPerPage;
-  console.log(indexOfLastEvent, currentPage, eventsPerPage)
-  console.log(indexOfFirstEvent, indexOfLastEvent, eventsPerPage)
+
   const currentEvents = events
-  console.log(currentEvents)
+
   const goToEdit = (eventId) => {
     navigate(`/dashboard/event/edit/${eventId}`);
   };
@@ -34,8 +33,7 @@ const EventListOwner = ({events, handlePagination, count, currentPageNumber }) =
 
   useEffect(() => {
     socket.on("get-crud-response", (data) => {
-      console.log("data", data)
-      console.log("JSON.stringify(data)", JSON.stringify(data))
+
       if (data.success == true) {
         setCurrentPage(1)
         Send("getMyEvent", {pageNumber:1, pageSize:5}, socket)
@@ -49,7 +47,7 @@ const EventListOwner = ({events, handlePagination, count, currentPageNumber }) =
   
   const renderPaginationItems = () => {
     const totalPages = Math.ceil(count / eventsPerPage);
-    const maxDisplayedPages = 5; // Nombre maximum de pages affichées
+    const maxDisplayedPages = 5;
     const displayEllipsis = totalPages > maxDisplayedPages;
 
     const paginationItems = [];
@@ -57,7 +55,7 @@ const EventListOwner = ({events, handlePagination, count, currentPageNumber }) =
     let startPage = 1;
     let endPage = totalPages;
 
-    // Calculer les pages de début et de fin en fonction du nombre maximum de pages affichées
+   
     if (displayEllipsis) {
       const middlePage = Math.floor(maxDisplayedPages / 2);
       const pagesBeforeEllipsis = middlePage;
@@ -73,7 +71,7 @@ const EventListOwner = ({events, handlePagination, count, currentPageNumber }) =
       }
     }
 
-    // Afficher les numéros de page
+
     for (let i = startPage; i <= endPage; i++) {
       paginationItems.push(
         <Pagination.Item
@@ -86,7 +84,7 @@ const EventListOwner = ({events, handlePagination, count, currentPageNumber }) =
       );
     }
 
-    // Ajouter les ellipses si nécessaire
+
     if (displayEllipsis) {
         if (startPage > 1) {
             paginationItems.unshift(

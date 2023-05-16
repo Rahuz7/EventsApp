@@ -65,7 +65,7 @@ const  refreshCredential = async (data) => {
         }
     }
     var tokenId = jwt.sign({ id: user.id }, config.secret, {
-        expiresIn: 86400 // 24 hours
+        expiresIn: 86400 
     });
 
     var authorities = [];
@@ -74,10 +74,10 @@ const  refreshCredential = async (data) => {
         authorities.push("ROLE_" + roles[i].name.toUpperCase());
     }
     var authoritiesToken = jwt.sign({ roles: authorities }, config.secret, {
-        expiresIn: 86400 // 24 hours
+        expiresIn: 86400 
     });
     var userUuidToken = jwt.sign({ uuid: user.uuid }, config.secret, {
-        expiresIn: 86400 // 24 hours
+        expiresIn: 86400 
     });
     providedData = {
         id: user.id,

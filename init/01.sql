@@ -6,5 +6,4 @@ CREATE DATABASE IF NOT EXISTS `payment-databases` CHARACTER SET utf8mb4 COLLATE 
 GRANT ALL ON `payment-databases`.* TO 'databases'@'%';
 
 
--- Ajoutez les inserts pour initialiser les types d'événements
 

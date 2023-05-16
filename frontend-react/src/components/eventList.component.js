@@ -16,19 +16,19 @@ const EventList = ({ activerFonctionC }) => {
   const currentDate = new Date();
 
   useEffect(() => {
-    console.log('CALLED useEffect')
+
   Send("getAllEvent", {pageNumber:1, pageSize:5}, socket)
   }, []);
 
   useEffect(() => {
     socket.on("get-my-event", (data) => {
-      console.log("data", data)
+   
       if (data.success == true) {
         setCount(data.count);
         setCurrentEvents(data.events);
         setInitialLoad(true)
-        //renderPaginationItems(data.count)
-        console.log(data, currentEvents)
+   
+     
        
         if (data.events.length == 0) {
           data.message = "Vous n'avez pas d'évènement pour le moment."
@@ -44,32 +44,26 @@ const EventList = ({ activerFonctionC }) => {
 
   useEffect(() => {
     if (initialLoad && count > 0) {
-    console.log("trigger OUPS")
+
     setSocketReceived(true);
     }
   }, [initialLoad, count]);
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
-    console.log('CALLED handlePageChange')
+   
     Send("getAllEvent", {pageNumber:pageNumber, pageSize:5}, socket)
   };
 
 
   const addToCart = (id) => {
     
-    console.log("INSPECT addToCart START")
-    console.log(id)
-    console.log(currentEvents)
-     
-  
-   // const product = currentEvents[(id % 5) - 1]
+
     const product = currentEvents.find((obj) => obj.id === id);
     const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
   
     const existingItemIndex = cartItems.findIndex(item => item.id === product.id);
-    console.log(existingItemIndex)
-    console.log("INSPECT addToCart END")
+
     if (product.place == 0 || ( cartItems[existingItemIndex] && (cartItems[existingItemIndex].amount + 1 > product.place))) {
       return
     }
@@ -80,24 +74,23 @@ const EventList = ({ activerFonctionC }) => {
     }
   
     localStorage.setItem('cartItems', JSON.stringify(cartItems));
-    console.log("addToCart ", cartItems )
-    console.log("addToCart ", cartItems.length )
+
     const total = cartItems.reduce((acc, item) => acc + item.amount, 0);
-    console.log("addToCart ", total )
+
     activerFonctionC(total);
   };
 
   const renderPaginationItems = (counter) => {
     const totalPages = Math.ceil(counter / eventsPerPage);
-    const maxDisplayedPages = 5; // Nombre maximum de pages affichées
+    const maxDisplayedPages = 5; 
     const displayEllipsis = totalPages > maxDisplayedPages;
-    console.log(totalPages,displayEllipsis )
+   
     const paginationItems = [];
 
     let startPage = 1;
     let endPage = totalPages;
 
-    // Calculer les pages de début et de fin en fonction du nombre maximum de pages affichées
+ 
     if (displayEllipsis) {
       const middlePage = Math.floor(maxDisplayedPages / 2);
       const pagesBeforeEllipsis = middlePage;
@@ -113,7 +106,7 @@ const EventList = ({ activerFonctionC }) => {
       }
     }
 
-    // Afficher les numéros de page
+
     if (startPage != endPage) {
       for (let i = startPage; i <= endPage; i++) {
         paginationItems.push(
@@ -127,7 +120,7 @@ const EventList = ({ activerFonctionC }) => {
         );
       }
    } else {
-    console.log("YES TRIGGER")
+    
     paginationItems.push(
       <Pagination.Item
         key={"B" + 0}
@@ -138,7 +131,7 @@ const EventList = ({ activerFonctionC }) => {
       </Pagination.Item>
     );
    }
-    // Ajouter les ellipses si nécessaire
+  
     if (displayEllipsis) {
         if (startPage > 1) {
             paginationItems.unshift(

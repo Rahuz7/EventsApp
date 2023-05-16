@@ -14,7 +14,7 @@ const EventDashboard = () => {
         const [tmpPageNumber, setTmpPageNumber] = useState(1);
         const [shouldRedirect, setShouldRedirect] = useState(false);
         const navigate = useNavigate();
-        console.log('quert access')
+    
         const handleSubmit = (event) => {
             event.preventDefault();
             Send("grantMeEventOwner", {}, socket)
@@ -39,19 +39,18 @@ const EventDashboard = () => {
         }, []);
 
         const handlePagination = (pageNumber) => {
-          // Mettez ici la logique pour gérer la pagination, par exemple, faire une requête API avec le numéro de page
+     
           setTmpPageNumber(pageNumber);
         };
 
         useEffect(() => {
-          console.log('handlePagination', tmpPageNumber);
+       
           Send("getMyEvent", { pageNumber: tmpPageNumber, pageSize: 5 }, socket);
         }, [tmpPageNumber]);
 
         useEffect(() => {
             socket.on("fetch-credential", (data) => {
-              console.log("data", data)
-              console.log("JSON.stringify(data)", JSON.stringify(data))
+  
               if (data.success == true) {
                 localStorage.setItem("user", JSON.stringify(data));
                 if (data.roles.includes("ROLE_ORGANISATEUR")) {
@@ -67,14 +66,13 @@ const EventDashboard = () => {
               
             });
             socket.on("get-my-event", (data) => {
-              console.log("data", data)
-              console.log("JSON.stringify(data)", JSON.stringify(data))
+   
               if (data.success == true) {
                 window.scrollTo({ top: 0, behavior: 'auto' });
                 setEvents(data.events);
                 setCount(data.count);
                 setCurrentPageNumber(data.pageNumber)
-                console.log("dashboard",tmpPageNumber, currentPageNumber, data.pageNumber )
+          
                 if (data.events.length == 0) {
                   data.message = "Vous n'avez pas d'évènement pour le moment."
                   setMessage(data.message);  
@@ -93,7 +91,7 @@ const EventDashboard = () => {
         return (
             <div className='event-owner-content-container'>
             <h1>Mes evènements</h1>
-            <button onClick={navigateToCreateEvent} class="button-event">Créer un évènement</button> 
+            <button onClick={navigateToCreateEvent} className="button-event">Créer un évènement</button> 
             {message && <p>{message}</p>}
             <EventListOwner events={events}  handlePagination={handlePagination} count={count} currentPageNumber={currentPageNumber}  />
           

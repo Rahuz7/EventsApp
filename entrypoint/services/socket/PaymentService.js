@@ -17,7 +17,25 @@ const payment = (socket, data) => {
 
 }
 
+const getBasket = (socket, data) => {
+
+    console.log('[PaymentService - getBasket] [DATA]', data)
+    const dataTmp = {
+        id:socket.id,
+        providedData: {
+            ...data
+        },
+        pipeline: "event-api",
+        action: "getBasket",
+        nextPipeline: "entrypoint",
+        nextAction: "genericCollectionResponse"
+    }
+    rabbitmq.sendTo(dataTmp.pipeline, JSON.stringify(dataTmp)); 
+
+}
+
 
 module.exports = {
-    payment
+    payment,
+    getBasket
 };

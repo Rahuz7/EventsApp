@@ -1,15 +1,15 @@
 const ejs = require('ejs');
 const nodemailer = require("nodemailer");
 
-const giveAccessEmail = async (data) => {
+const paymentSuccess = async (data) => {
 
     let providedData = {
         success: false,
         message: "erreur d'authentification"
     }
-  
+    console.log(data);
     const { recipient, subject, template, variables } = data;
-
+    console.log(`Recipient: ${recipient}, Subject: ${subject}`);
     let transporter = nodemailer.createTransport({
         host: 'mailhog',
         port: 1025, // or 8025
@@ -42,5 +42,5 @@ const giveAccessEmail = async (data) => {
 };
 
 module.exports = {
-    giveAccessEmail
+    paymentSuccess
 };

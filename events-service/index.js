@@ -68,7 +68,7 @@ loadService(serviceDir);
       if (serviceMap.hasOwnProperty(data.action)) {
           console.log(`Action '${data.action}' call`);
          data.pipeline = undefined;
-         const { providedData, pipeline, action ,nextPipeline, nextAction } = await serviceMap[data.action](data.providedData); // Appelle la fonction appropriée en fonction de l'action
+         const { providedData, pipeline, action ,nextPipeline, nextAction } = await serviceMap[data.action](data.providedData); 
          data.action = undefined;
          console.log("Retour action ", data.action);
          console.log("providedData", providedData);
