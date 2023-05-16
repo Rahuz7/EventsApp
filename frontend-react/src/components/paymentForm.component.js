@@ -63,7 +63,7 @@ const PaymentForm = () => {
                 </div>
               </div>
             </form>
-          </div>
+        </div>
         </div>
         <div class="payment-centered-button">
           <button type="submit">Payer</button>
