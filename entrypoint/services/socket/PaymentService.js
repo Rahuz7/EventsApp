@@ -3,18 +3,18 @@ const rabbitmq = require('../../mqrabbit');
 const payment = (socket, data) => {
 
     console.log('[PaymentService - Process Payment step 1 UserInfo] [DATA]', data)
-    /*const dataTmp = {
+    const dataTmp = {
         id:socket.id,
         providedData: {
             ...data
         },
         pipeline: "user-api",
-        action: "createUser",
+        action: "createAnonymUser",
         nextPipeline: "entrypoint",
-        nextAction: "sendCreateUserResponse"
+        nextAction: "paymentStepEvent"
     }
     rabbitmq.sendTo(dataTmp.pipeline, JSON.stringify(dataTmp)); 
-*/
+
 }
 
 

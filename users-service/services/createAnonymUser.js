@@ -1,5 +1,6 @@
 const db = require("../models");
 const config = require("../config/auth.config");
+const {hasAuthority, verifyToken} = require('../module/security/authority');
 const User = db.user;
 const UserInfo = db.userInfo;
 const Role = db.role;
@@ -7,28 +8,40 @@ const Op = db.Sequelize.Op;
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 const generateToken = require('../module/generator/token/tokenGenerator');
-const createOrLinkUserInfo = async (userUuid, userEmail, transaction = null) => {
+const createOrLinkUserInfo = async (data, transaction = null) => {
 
     try {
+
+       
         const userInfo = await UserInfo.findOne({
             where: {
-                email: userEmail,
-                uuid: {
-                    [db.Sequelize.Op.not]: null
-                }
+                    uuid: data.userUuid   
             }
         }, { transaction: transaction });
-        if (!userInfo) {
-            const userInfoTmp = await UserInfo.create({
-                uuid:  userUuid,
-                email: userEmail,
+        if (userInfo) {
+            await userInfo.update({
+                uuid:  data.userUuid,
+                email: data.email,
+                firstName: data.firstName || " ",
+                lastName: data.lastName || " ",
+                zipCode: data.zipCode || " ",
+                adresse: data.address || " ",
+                country: data.country || " "
             }, { transaction: transaction })
         } else {
-            //userInfo.uuid = userUuid;
-            userInfo.setUuid(userUuid, { transaction: transaction })
-            await userInfo.save()
+            const userInfoTmp = await UserInfo.create({
+                uuid:  data.userUuid ,
+                email: data.email,
+                firstName: data.firstName || " " ,
+                lastName: data.lastName || " ",
+                zipCode: data.zipCode || " ",
+                adresse: data.address || " ",
+                country: data.country || " "
+            }, { transaction: transaction })
         }
-    } catch (e) {
+
+    }
+     catch (e) {
         throw e;
     }
 }
@@ -41,20 +54,93 @@ const  createAnonymUser = async (data) => {
     }
 
     try {
+        let token = data.header["x-access-token"];
 
-        const uuid = generateToken();
+        if (token) {
+            const decoded = await verifyToken(data.header.userUuidToken, config.secret);
+            const decodedUuid = decoded.uuid
+            console.log('DECODED DEBUG', decoded, decodedUuid)
+            if (decodedUuid) {
+                const userTmp = await User.findOne({
+                    where: {
+                         uuid: decodedUuid 
+                }})
+                if (userTmp) {
+                    data.email = userTmp.email
+                }
+            }
 
-  
-
-        const existingUser = await User.findOne({
+        }
+        console.log("AFTER DECODED /////////////", data)
+        const alreadyAnonym = await User.findOne({
             where: {
-              [db.Sequelize.Op.or]: [
-                { uuid: uuid },
+              [db.Sequelize.Op.and]: [
                 { email: data.email },
                 { isAnonym: true }
               ]
         }})
+        if (alreadyAnonym) {
+            const userAnonymInfo = await UserInfo.findOne({
+                where: {
+                    uuid: alreadyAnonym.uuid }
+                
+            })
+
+
+            providedData = data;
+            providedData.success = true;
+            providedData.userUuid = userAnonymInfo.userUuid
+            providedData.message = "Info compte récupérée  avec succés."
+            return {
+                providedData,
+            } 
+        }
+        const uuid = generateToken();
+
+  
+        const existingUserUuid = await User.findOne({
+            where: {
+  
+                uuid: uuid
+
+        }})
+
+        if (existingUserUuid) {
+            providedData.message = "error existing uuid"
+            return {
+                providedData,
+            } 
+        }
+        const existingUser = await User.findOne({
+            where: {
+              [db.Sequelize.Op.and]: [
+                { email: data.email },
+                { isAnonym: false }
+              ]
+        }})
+
+
         if  ( existingUser) {
+
+            const userInfo = await UserInfo.findOne({
+                where: {
+                        uuid: existingUser.uuid   
+                }
+            });
+
+            userInfo.update({
+                email: data.email,
+                firstName: data.firstName || " " ,
+                lastName: data.lastName || " ",
+                zipCode: data.zipCode || " ",
+                adresse: data.address || " ",
+                country: data.country || " "
+            })
+
+            providedData = data;
+            providedData.success = true
+            providedData.userUuid = userInfo.userUuid
+            providedData.message = "Info compte récupérée  avec succés."
             return {
                 providedData,
             } 
@@ -70,25 +156,20 @@ const  createAnonymUser = async (data) => {
                 isClosed: false,
                 isAnonym: true
             }, { transaction: t })
-            console.log('END WALL')
             if (data.roles) {
-            console.log('data.roles')
             const roles = await Role.findAll({
                     where: {
                     name: {
                         [Op.or]: data.roles
                     }
                     }}, { transaction: t })
-                    console.log('before  data.roles 1')
                 await user.setRoles(roles, { transaction: t })
-                console.log('after  data.roles 1')
             } else {
-                console.log('after  data.roles 2')
                 await user.setRoles([1], { transaction: t });
-                console.log('before  data.roles 2')
             }
             console.log('createOrLinkUserInfo')
-            await createOrLinkUserInfo(uuid, data.email, t)
+            data.userUuid = uuid;
+            await createOrLinkUserInfo(data, t)
             console.log('before commit')
             await t.commit();
             console.log('commited')
@@ -98,13 +179,11 @@ const  createAnonymUser = async (data) => {
         }
             
         
-
+        providedData = data;
+        data.userUuid = uuid;
         providedData.success = true
-        providedData.message = "Votre compte utilisateur à été crée avec succés."
-        providedData.activationToken = activationToken
-        providedData.activationTokenUuid = activationTokenUuid
-        providedData.email = data.email
-        providedData.username = data.username   
+        providedData.message = "Compte anonyme créee avec succé."
+
         return {
             providedData,
         } 

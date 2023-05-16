@@ -16,7 +16,7 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.STRING
       },
       adresse: {
-        type: Sequelize.BOOLEAN            
+        type: Sequelize.STRING            
       },
       country: {
         type: Sequelize.STRING            

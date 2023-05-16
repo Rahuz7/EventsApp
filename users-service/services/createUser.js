@@ -25,7 +25,7 @@ const createOrLinkUserInfo = async (userUuid, userEmail, transaction = null) => 
             }, { transaction: transaction })
         } else {
             //userInfo.uuid = userUuid;
-            userInfo.setUuid(userUuid, { transaction: transaction })
+            await userInfo.update({ uuid: userUuid }, { transaction: transaction });
             await userInfo.save()
         }
     } catch (e) {
@@ -81,6 +81,7 @@ const  createUser = async (data) => {
                await createOrLinkUserInfo(existingUser.uuid, existingUser.email, t)
                await t.commit();
             } catch (e) {
+                console.log("error //////////// :::::::::::::::::::", e )
                 await t.rollback();
             }
             providedData.success = true
