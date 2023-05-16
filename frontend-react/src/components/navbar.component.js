@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { useEffect, useState} from "react";
 //import LoginBtn from './loginBtn.component';
 //import SignupBtn from './signupBtn.component';
 import ProfileIcon from './profileIcon.component.js';
@@ -8,8 +9,29 @@ import SignupBtn from './signupBtn.component';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import Cart from './cart.component.js';
-const Navbar = ({isLoggedIn}) => {
+const Navbar = ({isLoggedIn, fonctionCActivee }) => {
         const navigate = useNavigate();
+        const [amount, setAmount] = useState(0);
+
+
+        useEffect(() => {
+          const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+          const total = cartItems.reduce((acc, item) => acc + item.amount, 0);
+          setAmount(total)
+        }, [])
+
+
+        useEffect(() => {
+          if (fonctionCActivee) {
+            maFonctionDeC(fonctionCActivee);
+          }
+        }, [fonctionCActivee]);
+      
+        function maFonctionDeC(fonctionCActivee) {
+          setAmount(fonctionCActivee)
+          console.log("Fonction de C activée depuis B !", fonctionCActivee);
+        }
+
 
         const handleClick = () => {
             navigate('/');
@@ -34,7 +56,7 @@ const Navbar = ({isLoggedIn}) => {
                 <div className='desktop-menu'>
                   <nav className='nav'> 
                     <a onClick={navigateToAccessEvent}>Je suis organisateur</a>
-                    <Link to="/cart">Panier</Link>
+                    <Link to="/cart">Panier({amount})</Link>
 
                     {/* <a href='#'>Panier</a> */}
                     <a href='#'>Calendrier</a>

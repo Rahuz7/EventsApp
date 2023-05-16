@@ -3,11 +3,11 @@ import '../styles/home.css';
 import EventDescription from './eventDescription.component';
 import EventList from './eventList.component'; 
 
-const EventCalendar = () => {
+const EventCalendar = ({ activerFonctionC } ) => {
         return (
             <div>
                 <EventDescription />
-                <EventList />
+                <EventList activerFonctionC={activerFonctionC} />
             </div>
         )
     }

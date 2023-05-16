@@ -28,6 +28,12 @@ function App() {
   const [count, setCount] = useState(0);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState(null);
+  const [fonctionCActivee, setFonctionCActivee] = useState(0);
+
+
+  function activerFonctionC(nbItem) {
+    setFonctionCActivee(nbItem);
+  }
 
   const handleLogin = (status) => {
     setIsLoggedIn(status);
@@ -65,7 +71,7 @@ function App() {
     <div>
       
           <div>
-              <Navbar isLoggedIn={isLoggedIn} />
+              <Navbar isLoggedIn={isLoggedIn} fonctionCActivee={fonctionCActivee} />
               <Routes> 
                     <Route path="/" element={<Home />} />
                     <Route path="/test" element={<Composant1 />} />
@@ -73,14 +79,14 @@ function App() {
                     <Route path="/login" element={ <Login onLogin={handleLogin} />  } />
                     <Route path="/signup" element={<Signup />} />
                     <Route path="/shield" element={<Shield />} />
-                    <Route path="/event" element={<EventCalendar />} />
+                    <Route path="/event" element={<EventCalendar activerFonctionC={activerFonctionC} />} />
                     <Route path="/activate" element={<ActivateAccount onLogin={handleLogin} />} />
                     <Route path="/event/access" element={<QueryAccess />} />
                     <Route path="/event/access/activate" element={<GiveAccess />} />
                     <Route path="/dashboard/event" element={<EventDashboard />} />
                     <Route path="/dashboard/event/new" element={<CreateEventForm />} />
                     <Route path="/dashboard/event/edit/:id" element={<EditEventForm />} />
-                    <Route path="/cart" element={<Cart />} />
+                    <Route path="/cart" element={<Cart activerFonctionC={activerFonctionC} />} />
               </Routes>
               <Footer />
           </div>

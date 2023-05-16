@@ -1,48 +1,97 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect  } from 'react';
 import Pagination from 'react-bootstrap/Pagination';
 import '../styles/eventList.css';
-
-const EventList = () => {
+import { format } from 'date-fns';
+import frLocale from 'date-fns/locale/fr';
+import { useNavigate } from 'react-router-dom';
+import Send from '../SendMessage';
+import socket from '../Socket';
+const EventList = ({ activerFonctionC }) => {
   const [eventsPerPage] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
+  const [currentEvents, setCurrentEvents] = useState([]);
+  const [socketReceived, setSocketReceived] = useState(false);
+  const [count, setCount] = useState(5);
+  const [initialLoad, setInitialLoad] = useState(false);
+  const currentDate = new Date();
 
-  const events = [
-    { id: 22, title: 'Concert de jazz', date: '28/05/2023 - 20:00', location: 'Paris', price: '$50', image: 'https://via.placeholder.com/150' },
-    { id: 23, title: 'Exposition d\'art contemporain', date: '29/05/2023 - 14:00', location: 'Lyon', price: '$20', image: 'https://via.placeholder.com/150' },
-    { id: 24, title: 'Conférence sur la science', date: '02/06/2023 - 18:30', location: 'Marseille', price: '$10', image: 'https://via.placeholder.com/150' },
-    { id: 25, title: 'Spectacle de danse moderne', date: '05/06/2023 - 19:00', location: 'Toulouse', price: '$30', image: 'https://via.placeholder.com/150' },
-    { id: 26, title: 'Foire du livre', date: '08/06/2023 - 10:00', location: 'Nice', price: 'Gratuit', image: 'https://via.placeholder.com/150' },
-    { id: 27, title: 'Match de football', date: '11/06/2023 - 15:00', location: 'Lille', price: '$25', image: 'https://via.placeholder.com/150' },
-    { id: 28, title: 'Festival de musique', date: '15/06/2023 - 16:00', location: 'Bordeaux', price: '$60', image: 'https://via.placeholder.com/150' },
-    { id: 29, title: 'Théâtre de marionnettes', date: '18/06/2023 - 11:00', location: 'Strasbourg', price: '$15', image: 'https://via.placeholder.com/150' },
-    { id: 30, title: 'Tournoi de tennis', date: '22/06/2023 - 09:00', location: 'Nantes', price: '$45', image: 'https://via.placeholder.com/150' },
-    { id: 31, title: 'Projection de film en plein air', date: '25/06/2023 - 20:30', location: 'Montpellier', price: '$8', image: 'https://via.placeholder.com/150' },
-    { id: 32, title: 'Projection de film en plein air', date: '25/06/2023 - 20:30', location: 'Montpellier', price: '$8', image: 'https://via.placeholder.com/150' },
-    { id: 33, title: 'Projection de film en plein air', date: '25/06/2023 - 20:30', location: 'Montpellier', price: '$8', image: 'https://via.placeholder.com/150' },
-    { id: 34, title: 'Projection de film en plein air', date: '25/06/2023 - 20:30', location: 'Montpellier', price: '$8', image: 'https://via.placeholder.com/150' },
-    { id: 35, title: 'Projection de film en plein air', date: '25/06/2023 - 20:30', location: 'Montpellier', price: '$8', image: 'https://via.placeholder.com/150' },
-    { id: 36, title: 'Projection de film en plein air', date: '25/06/2023 - 20:30', location: 'Montpellier', price: '$8', image: 'https://via.placeholder.com/150' },
-    { id: 37, title: 'Projection de film en plein air', date: '25/06/2023 - 20:30', location: 'Montpellier', price: '$8', image: 'https://via.placeholder.com/150' },
-    { id: 38, title: 'Projection de film en plein air', date: '25/06/2023 - 20:30', location: 'Montpellier', price: '$8', image: 'https://via.placeholder.com/150' },
-    { id: 39, title: 'Projection de film en plein air', date: '25/06/2023 - 20:30', location: 'Montpellier', price: '$8', image: 'https://via.placeholder.com/150' },
-    { id: 40, title: 'Projection de film en plein air', date: '25/06/2023 - 20:30', location: 'Montpellier', price: '$8', image: 'https://via.placeholder.com/150' },
-  
-  ];
+  useEffect(() => {
+    console.log('CALLED useEffect')
+  Send("getAllEvent", {pageNumber:1, pageSize:5}, socket)
+  }, []);
 
+  useEffect(() => {
+    socket.on("get-my-event", (data) => {
+      console.log("data", data)
+      if (data.success == true) {
+        setCount(data.count);
+        setCurrentEvents(data.events);
+        setInitialLoad(true)
+        //renderPaginationItems(data.count)
+        console.log(data, currentEvents)
+       
+        if (data.events.length == 0) {
+          data.message = "Vous n'avez pas d'évènement pour le moment."
+        
+        }
+              
+      } else {
+        
+      }
+      
+    });
+  }, [socket]);
+
+  useEffect(() => {
+    if (initialLoad && count > 0) {
+    console.log("trigger OUPS")
+    setSocketReceived(true);
+    }
+  }, [initialLoad, count]);
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
+    console.log('CALLED handlePageChange')
+    Send("getAllEvent", {pageNumber:pageNumber, pageSize:5}, socket)
   };
-  const indexOfLastEvent = currentPage * eventsPerPage;
-  const indexOfFirstEvent = indexOfLastEvent - eventsPerPage;
-  const currentEvents = events.slice(indexOfFirstEvent, indexOfLastEvent);
 
+
+  const addToCart = (id) => {
+    
+    console.log("INSPECT addToCart START")
+    console.log(id)
+    console.log(currentEvents)
+     
   
-  const renderPaginationItems = () => {
-    const totalPages = Math.ceil(events.length / eventsPerPage);
+   // const product = currentEvents[(id % 5) - 1]
+    const product = currentEvents.find((obj) => obj.id === id);
+    const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+  
+    const existingItemIndex = cartItems.findIndex(item => item.id === product.id);
+    console.log(existingItemIndex)
+    console.log("INSPECT addToCart END")
+    if (product.place == 0 || ( cartItems[existingItemIndex] && (cartItems[existingItemIndex].amount + 1 > product.place))) {
+      return
+    }
+    if (existingItemIndex === -1) {
+      cartItems.push({ ...product, amount: 1 });
+    } else {
+      cartItems[existingItemIndex].amount += 1;
+    }
+  
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+    console.log("addToCart ", cartItems )
+    console.log("addToCart ", cartItems.length )
+    const total = cartItems.reduce((acc, item) => acc + item.amount, 0);
+    console.log("addToCart ", total )
+    activerFonctionC(total);
+  };
+
+  const renderPaginationItems = (counter) => {
+    const totalPages = Math.ceil(counter / eventsPerPage);
     const maxDisplayedPages = 5; // Nombre maximum de pages affichées
     const displayEllipsis = totalPages > maxDisplayedPages;
-
+    console.log(totalPages,displayEllipsis )
     const paginationItems = [];
 
     let startPage = 1;
@@ -65,27 +114,39 @@ const EventList = () => {
     }
 
     // Afficher les numéros de page
-    for (let i = startPage; i <= endPage; i++) {
-      paginationItems.push(
-        <Pagination.Item
-          key={i}
-          active={i === currentPage}
-          onClick={() => handlePageChange(i)}
-        >
-          {i}
-        </Pagination.Item>
-      );
-    }
-
+    if (startPage != endPage) {
+      for (let i = startPage; i <= endPage; i++) {
+        paginationItems.push(
+          <Pagination.Item
+            key={"A"+i}
+            active={i === currentPage}
+            onClick={() => handlePageChange(i)}
+          >
+            {i}
+          </Pagination.Item>
+        );
+      }
+   } else {
+    console.log("YES TRIGGER")
+    paginationItems.push(
+      <Pagination.Item
+        key={"B" + 0}
+        active={0 === currentPage}
+        onClick={() => handlePageChange(1)}
+      >
+        1
+      </Pagination.Item>
+    );
+   }
     // Ajouter les ellipses si nécessaire
     if (displayEllipsis) {
         if (startPage > 1) {
             paginationItems.unshift(
-                <Pagination.Ellipsis /> 
+                <Pagination.Ellipsis key="V + 0" /> 
               );
           paginationItems.unshift(
             <Pagination.Item
-            key="1"
+            key="C + 0"
             active={currentPage === 1}
             onClick={() => handlePageChange(1)}>1</Pagination.Item>
           );
@@ -94,12 +155,12 @@ const EventList = () => {
         }
         if (endPage < totalPages) {
           paginationItems.push(
-            <Pagination.Ellipsis /> 
+            <Pagination.Ellipsis key="R + 0" /> 
            
           );
           paginationItems.push(
             <Pagination.Item
-            key={totalPages}
+            key={"C" + totalPages + 1}
             active={totalPages === currentPage}
             onClick={() => handlePageChange(totalPages)}
           >
@@ -114,34 +175,37 @@ const EventList = () => {
   };
   return (
     <div>
-      <div className="event-list">
-        {currentEvents.map((event) => (
-          <div className="event" key={event.id}>
-             <div className="event-card">
-              {event.image && (
-                <div className="event-image">
-                        <img src={event.image} alt={event.title} />
-                </div>
-              )}
-              <div className='event-card-content'>
-                <h3 className="event-title">{event.title}</h3>
-                <p className="event-location">{event.location}</p>
-                <p className="event-date">{event.date}</p>
-                <p className="event-price">{event.price}</p>
+    <div className="event-list">
+      {currentEvents.map((event) => (
+        <div className="event" key={event.id}>
+           <div className="event-card">
+            {event.event_type && (event.event_type.avatarSrc && (
+              <div className="event-image-owner">
+                      <img src={`/images/${event.event_type.avatarSrc}`} alt={event.title} />
               </div>
-              <div className="event-card-cart">
-                <a href='#'> {/* ACTION WHEN CLICK ON ADD TO CART */}
-                  <img className="icon-shopping-cart" src="/icons/ajout-panier.svg" alt='ajouter au panier' style={{ width: '30px', height: '30px'}}/>
-                </a>
-              </div>
+            ))}
+            <div className='event-card-content' >
+              <h3 className="event-title">{event.title}</h3>
+              <p className="event-location">Emplacement : {event.location}</p>
+              <p className="event-date">Date debut :  {format(new Date(event.dateDebut), 'dd MMMM yyyy HH:mm', { locale: frLocale })}</p>
+              <p className="event-date">Date fin :  {format(new Date(event.dateFin), 'dd MMMM yyyy HH:mm', { locale: frLocale })}</p>
+              <p className="event-date">Places : {event.place}</p>
+              <p className="event-price">Prix : {event.price}</p>
+            </div>
+            <div className="event-card-cart">
+               {/* ACTION WHEN CLICK ON ADD TO CART */}
+               {new Date(event.dateDebut) > currentDate && (
+                <img className="icon-shopping-cart" src="/icons/ajout-panier.svg" onClick={() => addToCart(event.id)}  alt='ajouter au panier' style={{ width: '30px', height: '30px', cursor: 'pointer'}}/>
+                )}
             </div>
           </div>
-        ))}
-      </div>
-      <div>
-        <Pagination>{renderPaginationItems()}</Pagination>
-      </div>
+        </div>
+      ))}
     </div>
+    <div>
+    {socketReceived && <Pagination>{renderPaginationItems(count)}</Pagination>}
+    </div>
+  </div>
   );
 };
 

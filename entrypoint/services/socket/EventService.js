@@ -85,10 +85,46 @@ const editEvent = (socket, data) => {
 
 }
 
+const deleteEvent = (socket, data) => {
+
+    console.log('[deleteEvent - addEvent] [DATA]', data)
+    const dataTmp = {
+        id:socket.id,
+        providedData: {
+            ...data
+        },
+        pipeline: "event-api",
+        action: "deleteEvent",
+        nextPipeline: "entrypoint",
+        nextAction: "basicCrudResponse"
+    }
+    rabbitmq.sendTo(dataTmp.pipeline, JSON.stringify(dataTmp)); 
+
+}
+
+const getAllEvent = (socket, data) => {
+
+    console.log('[EventService - getAllEvent] [DATA]', data)
+    const dataTmp = {
+        id:socket.id,
+        providedData: {
+            ...data
+        },
+        pipeline: "event-api",
+        action: "getAllEvent",
+        nextPipeline: "entrypoint",
+        nextAction: "sendGetMyEventResponse"
+    }
+    rabbitmq.sendTo(dataTmp.pipeline, JSON.stringify(dataTmp)); 
+
+}
+
 module.exports = {
     getMyEvent,
     addEvent,
     getEventType,
     getEvent,
-    editEvent
+    editEvent,
+    deleteEvent,
+    getAllEvent
 };

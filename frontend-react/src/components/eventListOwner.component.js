@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect  } from 'react';
 import Pagination from 'react-bootstrap/Pagination';
 import '../styles/eventList.css';
 import { format } from 'date-fns';
 import frLocale from 'date-fns/locale/fr';
 import { useNavigate } from 'react-router-dom';
-
+import Send from '../SendMessage';
+import socket from '../Socket';
 const EventListOwner = ({events, handlePagination, count, currentPageNumber }) => {
   const [eventsPerPage] = useState(5);
   const [currentPage, setCurrentPage] = useState(currentPageNumber);
@@ -26,7 +27,25 @@ const EventListOwner = ({events, handlePagination, count, currentPageNumber }) =
     navigate(`/dashboard/event/edit/${eventId}`);
   };
 
+  const deleteEvent = (eventId) => {
+    Send("deleteEvent", {id:eventId}, socket)
+  };
 
+
+  useEffect(() => {
+    socket.on("get-crud-response", (data) => {
+      console.log("data", data)
+      console.log("JSON.stringify(data)", JSON.stringify(data))
+      if (data.success == true) {
+        setCurrentPage(1)
+        Send("getMyEvent", {pageNumber:1, pageSize:5}, socket)
+      
+      } else {
+  
+      }
+      
+    });
+  })
   
   const renderPaginationItems = () => {
     const totalPages = Math.ceil(count / eventsPerPage);
@@ -58,7 +77,7 @@ const EventListOwner = ({events, handlePagination, count, currentPageNumber }) =
     for (let i = startPage; i <= endPage; i++) {
       paginationItems.push(
         <Pagination.Item
-          key={i}
+          key={"A"+i}
           active={i === currentPage}
           onClick={() => handlePageChange(i)}
         >
@@ -71,11 +90,11 @@ const EventListOwner = ({events, handlePagination, count, currentPageNumber }) =
     if (displayEllipsis) {
         if (startPage > 1) {
             paginationItems.unshift(
-                <Pagination.Ellipsis /> 
+                <Pagination.Ellipsis key="D0" /> 
               );
           paginationItems.unshift(
             <Pagination.Item
-            key="1"
+            key="B1"
             active={currentPage === 1}
             onClick={() => handlePageChange(1)}>1</Pagination.Item>
           );
@@ -84,12 +103,12 @@ const EventListOwner = ({events, handlePagination, count, currentPageNumber }) =
         }
         if (endPage < totalPages) {
           paginationItems.push(
-            <Pagination.Ellipsis /> 
+            <Pagination.Ellipsis key="D1" /> 
            
           );
           paginationItems.push(
             <Pagination.Item
-            key={totalPages}
+            key={"V"+totalPages}
             active={totalPages === currentPage}
             onClick={() => handlePageChange(totalPages)}
           >
@@ -122,8 +141,11 @@ const EventListOwner = ({events, handlePagination, count, currentPageNumber }) =
                 <p className="event-price">Prix : {event.price}</p>
               </div>
               <div className="event-card-cart">
+              <a href='#'> {/* ACTION WHEN CLICK ON ADD TO CART */}
+                  <img className="icon-shopping-cart" src="/icons/delete.svg" onClick={() => deleteEvent(event.id)} alt='ajouter au panier' style={{ width: '30px', height: '30px'}}/>
+                </a>
                 <a href='#'> {/* ACTION WHEN CLICK ON ADD TO CART */}
-                  <img className="icon-shopping-cart" src="/icons/ajout-panier.svg" onClick={() => goToEdit(event.id)} alt='ajouter au panier' style={{ width: '30px', height: '30px'}}/>
+                  <img className="icon-shopping-cart" src="/icons/edit.svg" onClick={() => goToEdit(event.id)} alt='ajouter au panier' style={{ width: '30px', height: '30px'}}/>
                 </a>
               </div>
             </div>
