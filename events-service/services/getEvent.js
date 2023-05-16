@@ -27,9 +27,21 @@ const  getEvent = async (data) => {
           }
       }
 
- 
+      const event = await Event.findOne({
+        attributes:  ['id', 'title', 'description', 'location' , ['date_debut', 'dateDebut'], ['date_fin', 'dateFin'], 'price', 'place'],
+        where: {
+            [db.Sequelize.Op.and]: [
+                { id: data.id },
+                { ownerUuid: decodedUuid },
+
+              ]
+        },
+        include: EventType 
+      })
+
+      providedData.event = event;     
       providedData.success = true;
-      providedData.message = "Events récupéré avec succés"
+      providedData.message = "Event récupéré avec succés"
       return {
         providedData
       }

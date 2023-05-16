@@ -14,8 +14,8 @@ const paginate = async (model, pageNumber, pageSize, attributes = null, includes
         raw: true,
         nest:true
       });
-  
-      return records.rows;
+      console.log(records)
+      return records;
     } catch (error) {
       console.error('Une erreur est survenue lors de la pagination de la table :', error);
       throw error;

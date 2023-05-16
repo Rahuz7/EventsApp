@@ -38,7 +38,9 @@ const  getMyEvents = async (data) => {
                 ownerUuid: decodedUuid
             
         })
-      providedData.events = events 
+      providedData.pageNumber = data.pageNumber
+      providedData.count = events.count; 
+      providedData.events = events.rows;  
       providedData.success = true;
       providedData.message = "Events paginés avec succés"
       return {

@@ -28,7 +28,7 @@ const  getEventType = async (data) => {
       }
       const events = await paginate(EventType, data.pageNumber, data.pageSize, 
         ['id', 'libelle'])
-      providedData.events = events 
+      providedData.events = events.rows
       providedData.success = true;
       providedData.message = "Events paginés avec succés"
       return {

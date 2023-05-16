@@ -3,20 +3,33 @@ import Pagination from 'react-bootstrap/Pagination';
 import '../styles/eventList.css';
 import { format } from 'date-fns';
 import frLocale from 'date-fns/locale/fr';
-const EventListOwner = ({events}) => {
+import { useNavigate } from 'react-router-dom';
+
+const EventListOwner = ({events, handlePagination, count, currentPageNumber }) => {
   const [eventsPerPage] = useState(5);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(currentPageNumber);
+  const navigate = useNavigate();
   console.log(events)
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
+    handlePagination(pageNumber)
   };
+  //setCurrentPage(currentPageNumber)
+  console.log(currentPageNumber)
   const indexOfLastEvent = currentPage * eventsPerPage;
   const indexOfFirstEvent = indexOfLastEvent - eventsPerPage;
-  const currentEvents = events.slice(indexOfFirstEvent, indexOfLastEvent);
+  console.log(indexOfLastEvent, currentPage, eventsPerPage)
+  console.log(indexOfFirstEvent, indexOfLastEvent, eventsPerPage)
+  const currentEvents = events
+  console.log(currentEvents)
+  const goToEdit = (eventId) => {
+    navigate(`/dashboard/event/edit/${eventId}`);
+  };
+
 
   
   const renderPaginationItems = () => {
-    const totalPages = Math.ceil(events.length / eventsPerPage);
+    const totalPages = Math.ceil(count / eventsPerPage);
     const maxDisplayedPages = 5; // Nombre maximum de pages affichées
     const displayEllipsis = totalPages > maxDisplayedPages;
 
@@ -110,7 +123,7 @@ const EventListOwner = ({events}) => {
               </div>
               <div className="event-card-cart">
                 <a href='#'> {/* ACTION WHEN CLICK ON ADD TO CART */}
-                  <img className="icon-shopping-cart" src="/icons/ajout-panier.svg" alt='ajouter au panier' style={{ width: '30px', height: '30px'}}/>
+                  <img className="icon-shopping-cart" src="/icons/ajout-panier.svg" onClick={() => goToEdit(event.id)} alt='ajouter au panier' style={{ width: '30px', height: '30px'}}/>
                 </a>
               </div>
             </div>

@@ -8,7 +8,10 @@ import { useNavigate } from 'react-router-dom';
 import EventListOwner from './eventListOwner.component';
 const EventDashboard = () => {
         const [events, setEvents] = useState([]);
+        const [count, setCount] = useState([]);
         const [message, setMessage] = useState('');
+        const [currentPageNumber, setCurrentPageNumber] = useState(1);
+        const [tmpPageNumber, setTmpPageNumber] = useState(1);
         const [shouldRedirect, setShouldRedirect] = useState(false);
         const navigate = useNavigate();
         console.log('quert access')
@@ -34,6 +37,17 @@ const EventDashboard = () => {
               Send("getMyEvent", {pageNumber:1, pageSize:5}, socket)
             }
         }, []);
+
+        const handlePagination = (pageNumber) => {
+          // Mettez ici la logique pour gérer la pagination, par exemple, faire une requête API avec le numéro de page
+          setTmpPageNumber(pageNumber);
+        };
+
+        useEffect(() => {
+          console.log('handlePagination', tmpPageNumber);
+          Send("getMyEvent", { pageNumber: tmpPageNumber, pageSize: 5 }, socket);
+        }, [tmpPageNumber]);
+
         useEffect(() => {
             socket.on("fetch-credential", (data) => {
               console.log("data", data)
@@ -56,7 +70,11 @@ const EventDashboard = () => {
               console.log("data", data)
               console.log("JSON.stringify(data)", JSON.stringify(data))
               if (data.success == true) {
+                window.scrollTo({ top: 0, behavior: 'auto' });
                 setEvents(data.events);
+                setCount(data.count);
+                setCurrentPageNumber(data.pageNumber)
+                console.log("dashboard",tmpPageNumber, currentPageNumber, data.pageNumber )
                 if (data.events.length == 0) {
                   data.message = "Vous n'avez pas d'évènement pour le moment."
                   setMessage(data.message);  
@@ -77,7 +95,7 @@ const EventDashboard = () => {
             <h1>Mes evènements</h1>
             <button onClick={navigateToCreateEvent} class="button-event">Créer un évènement</button> 
             {message && <p>{message}</p>}
-            <EventListOwner events={events} />
+            <EventListOwner events={events}  handlePagination={handlePagination} count={count} currentPageNumber={currentPageNumber}  />
           
           </div>
         )

@@ -28,6 +28,23 @@ const  addEvent = async (data) => {
           }
       }
 
+
+      const currentDate = new Date().toISOString().split('T')[0];
+
+      if (data.dateDebut < currentDate) {
+        providedData.message = "Date de début antérieure à la date actuelle"
+        return {
+          providedData
+        }
+      } 
+
+      if ( data.dateFin < data.dateDebut) {
+        providedData.message = "Date de fin antérieure à la date de début"
+        return {
+          providedData
+        }
+      } 
+
       const event = Event.create({
         ownerUuid: decodedUuid,
         title: data.title,
@@ -39,6 +56,9 @@ const  addEvent = async (data) => {
         place: data.place,
         eventTypeId: data.eventType
       })
+      
+
+
       
       providedData.success = true;
       providedData.message = "Events crée avec succés"
