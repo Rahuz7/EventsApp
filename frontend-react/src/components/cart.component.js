@@ -34,6 +34,10 @@ const Cart = ({ activerFonctionC }) => {
   const handleChange = (ev, id) => {
     console.log(ev)
     const newAmount = parseInt(ev.target.value);
+    if (newAmount <= 0) {
+      // La valeur est 0, vous pouvez gérer cette situation comme vous le souhaitez
+      return;
+    }
     const eventIndex = events.findIndex(event => event.id === id);
     if ((newAmount > events[eventIndex].place)) {
       return
@@ -55,11 +59,54 @@ const Cart = ({ activerFonctionC }) => {
       cartItems[existingItemIndex].amount = newAmount;
     }
   
+    let totalPriceTmp = 0;
+    let nbItemTmp = cartItems.length;
+    let nbSubItemTmp = 0;
+    for (let i = 0; i < cartItems.length; i++) {
+      const item = cartItems[i];
+      totalPriceTmp += (item.amount * item.price)
+      nbSubItemTmp += item.amount
+      item.totalPrice = item.amount * item.price;
+    }
+    setTotalPrice(totalPriceTmp)
+    setNbSubItem(nbSubItemTmp)
+    setNbItem(nbItemTmp)
+    setEvents(cartItems);
+
+
     localStorage.setItem('cartItems', JSON.stringify(cartItems));
     const total = cartItems.reduce((acc, item) => acc + item.amount, 0);
     activerFonctionC(total);
     console.log(cartItems)
   };
+
+  const handleDelete = (ev, id) => {
+    console.log('handleDelete')
+    const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+
+    // Supprimer l'objet avec l'ID correspondant
+    const updatedArray = cartItems.filter(obj => obj.id !== id);
+    
+    console.log(updatedArray)
+    let totalPriceTmp = 0;
+    let nbItemTmp = updatedArray.length;
+    let nbSubItemTmp = 0;
+    for (let i = 0; i < updatedArray.length; i++) {
+      const item = updatedArray[i];
+      totalPriceTmp += (item.amount * item.price)
+      nbSubItemTmp += item.amount
+      item.totalPrice = item.amount * item.price;
+    }
+    setTotalPrice(totalPriceTmp)
+    setNbSubItem(nbSubItemTmp)
+    setNbItem(nbItemTmp)
+    setEvents(updatedArray);
+
+    // Mettre à jour le tableau dans le localStorage
+    localStorage.setItem('cartItems', JSON.stringify(updatedArray));
+    const total = cartItems.reduce((acc, item) => acc + item.amount, 0);
+    activerFonctionC(total);
+  }
 
 
   return (
@@ -73,7 +120,7 @@ const Cart = ({ activerFonctionC }) => {
               </div>
               <div class="cart-price">{price}</div>
               <div class="cart-price">{totalPrice}</div>
-              <img className="cart-delete-icon" src={cancelIcon} alt='supprimer' style={{ width: '30px', height: '30px'}}/>
+              <img className="cart-delete-icon" src={cancelIcon} onClick={(event) => handleDelete(event, id)} alt='supprimer' style={{ width: '30px', height: '30px'}}/>
             </div>
           ))}
         </div>

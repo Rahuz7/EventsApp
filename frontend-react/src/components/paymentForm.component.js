@@ -1,72 +1,141 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/form.css';
 import '../styles/paymentForm.css';
 import keyboard from '../icons/keyboard.jpg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCreditCard, faLock } from '@fortawesome/free-solid-svg-icons';
-
+import socket from '../Socket';
+import Send from '../SendMessage';
 const PaymentForm = () => {
+  const [totalPrice, setTotalPrice] = useState(0)
+  const [nbItem, setNbItem] = useState(0)
+  const [nbSubItem, setNbSubItem] = useState(0)
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    address: '',
+    zipCode: '',
+    country: '',
+    titulaire: '',
+    expiration: '',
+    cvv: ''
+  });
+
+  useEffect(() => {
+    let user = JSON.parse(localStorage.getItem('user')) || [];
+    if (user && user.email) {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        email: user.email, // Valeur programmée pour le champ email
+      }));
+    }
+    let storedCartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+    let totalPriceTmp = 0;
+    let nbItemTmp = storedCartItems.length;
+    let nbSubItemTmp = 0;
+    for (let i = 0; i < storedCartItems.length; i++) {
+      const item = storedCartItems[i];
+      totalPriceTmp += (item.amount * item.price)
+      nbSubItemTmp += item.amount
+      item.totalPrice = item.amount * item.price;
+    }
+    setTotalPrice(totalPriceTmp)
+    setNbSubItem(nbSubItemTmp)
+    setNbItem(nbItemTmp)
+  }, []);
+
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Utilisez les données du formulaire ici, par exemple :
+    let user = JSON.parse(localStorage.getItem('user')) || [];
+    Send("payment", { ...formData }, socket)
+    console.log(formData);
+  };
+
 
   return (
-    <div class="payment-container">
+    <div className="cart-container">
+    <div className="cart-left-container">
+    <div className="payment-container" style={{ height: '100%' }}>
       <img className="payment-form-background" src={keyboard}/>
-        <div class="payment-form-section">
-          <div class="payment-left-section">
+        <div className="payment-form-section">
+          <div className="payment-left-section">
             <h2>Données de Facturation</h2>
             <form>
-              <div class="form-group">
-                <label for="nom">Nom :</label>
-                <input type="text" id="nom" name="nom" required />
+              <div className="form-group">
+                <label htmlFor="lastName">Nom :</label>
+                <input type="text" id="lastName" name="lastName" value={formData.lastName} onChange={handleChange} required />
               </div>
-              <div class="form-group">
-                <label for="prenom">Prénom :</label>
-                <input type="text" id="prenom" name="prenom" required />
+              <div className="form-group">
+                <label htmlFor="firstName">Prénom :</label>
+                <input type="text" id="firstName" name="firstName" value={formData.firstName} onChange={handleChange} required />
               </div>
-              <div class="form-group">
-                <label for="numRue">Numéro de Rue :</label>
-                <input type="text" id="numRue" name="numRue" required />
+              <div className="form-group">
+                <label htmlFor="email"> </label>Email :
+                <input type="text" id="email" name="email" value={formData.email} onChange={handleChange} required />
               </div>
-              <div class="form-group">
-                <label for="nomRue">Nom de Rue :</label>
-                <input type="text" id="nomRue" name="nomRue" required />
+              <div className="form-group">
+                <label htmlFor="country">Pays:</label>
+                <input type="text" id="country" name="country" value={formData.country} onChange={handleChange} required />
               </div>
-              <div class="form-group">
-                <label for="codePostal">Code Postal :</label>
-                <input type="text" id="codePostal" name="codePostal" required />
+              <div className="form-group">
+                <label htmlFor="zipCode">Code Postal :</label>
+                <input type="text" id="zipCode" name="zipCode" value={formData.zipCode} onChange={handleChange} required />
               </div>
+              <div className="form-group">
+                <label htmlFor="address">Adresse :</label>
+                <input type="text" id="address" name="address" value={formData.address} onChange={handleChange} required />
+              </div>
+            
             </form>
           </div>
-          <div class="payment-right-section">
+          <div className="payment-right-section">
             <h2>Données de Paiement</h2>
             <form>
-              <div class="form-group">
-                <label for="numCarte">Numéro de Carte :</label>
-                <div class="input-with-icon">
-                  <input type="text" id="numCarte" name="numCarte" required />
+              <div className="form-group">
+                <label htmlFor="numCarte">Numéro de Carte :</label>
+                <div className="input-with-icon">
+                  <input type="text" id="numCarte" name="numCarte" value={formData.numCarte} onChange={handleChange} required />
                   <FontAwesomeIcon icon={faCreditCard} className="icon" />
                 </div>
               </div>
-              <div class="form-group">
-                <label for="titulaire">Titulaire de la Carte :</label>
-                <input type="text" id="titulaire" name="titulaire" required />
+              <div className="form-group">
+                <label htmlFor="titulaire">Titulaire de la Carte :</label>
+                <input type="text" id="titulaire" name="titulaire" value={formData.titulaire} onChange={handleChange} required />
               </div>
-              <div class="form-group">
-                <label for="expiration">Date d'Expiration :</label>
-                <input type="text" id="expiration" name="expiration" required />
+              <div className="form-group">
+                <label htmlFor="expiration">Date d'Expiration :</label>
+                <input type="text" id="expiration" name="expiration" value={formData.expiration} onChange={handleChange} required />
               </div>
-              <div class="form-group">
-                <label for="cvv">CVV :</label>
-                <div class="input-with-icon">
-                  <input type="text" id="cvv" name="cvv" required />
+              <div className="form-group">
+                <label htmlFor="cvv">CVV :</label>
+                <div className="input-with-icon">
+                  <input type="text" id="cvv" name="cvv" value={formData.cvv} onChange={handleChange} required />
                   <FontAwesomeIcon icon={faLock} className="icon" />
                 </div>
               </div>
             </form>
           </div>
         </div>
-        <div class="payment-centered-button">
-          <button type="submit">Payer</button>
+        <div className="payment-centered-button">
+        </div>
+    </div>
+    </div>
+    <div className="cart-right-container">
+          <div className="summary">
+          <div className="total-items">Nombre d'article: <span id="total-items">{nbItem}</span></div>
+              <div className="total-items">Total d'articles: <span id="total-items">{nbSubItem}</span></div>
+              <div className="total-price">Prix total: <span id="total-price">{totalPrice}€</span></div>
+              <Link to="/cart" className="checkout-btn">Retour</Link>
+              <button  onClick={handleSubmit} className="checkout-btn">Payer ma commande</button>
+          </div>
         </div>
     </div>
   );
