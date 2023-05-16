@@ -88,6 +88,7 @@ function App() {
                     <Route path="/dashboard/event/new" element={<CreateEventForm />} />
                     <Route path="/dashboard/event/edit/:id" element={<EditEventForm />} />
                     <Route path="/cart" element={<Cart activerFonctionC={activerFonctionC} />} />
+                    <Route path="/payment" element={<PaymentForm />} />
               </Routes>
               <Footer />
           </div>

@@ -14,14 +14,12 @@ const  getAllEvent = async (data) => {
     }
 
     try {
-      const decoded = await verifyToken(data.header.userUuidToken, config.secret);
-      const decodedUuid = decoded.uuid;
-      console.log('id décodé', decodedUuid)
-      if (!decodedUuid) {
+      if (!data || !data.pageNumber || !data.pageSize) {
           return {
-              providedData,
-          }
+            providedData,
+        }
       }
+    
       const events = await paginate(Event, data.pageNumber, data.pageSize, 
         ['id', 'title', 'description', 'location' , ['date_debut', 'dateDebut'], ['date_fin', 'dateFin'], 'price', 'place'],
         [
