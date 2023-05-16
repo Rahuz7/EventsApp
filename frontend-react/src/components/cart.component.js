@@ -29,7 +29,7 @@ const Cart = () => {
           <div class="summary">
               <div class="total-items">Total d'articles: <span id="total-items">2</span></div>
               <div class="total-price">Prix total: <span id="total-price">25€</span></div>
-              <button class="checkout-btn">Valider</button>
+              <Link to="/payment" className="checkout-btn">Valider</Link>
           </div>
         </div>
         

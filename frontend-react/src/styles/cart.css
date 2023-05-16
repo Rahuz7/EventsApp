@@ -88,14 +88,14 @@
   }
 
   .checkout-btn {
-    align-self: flex-end;
     margin-top: 20px;
-    margin-right: 20px;
     background-color: #3096B7;
     font-weight: 700;
     color: #fff;
-    padding: 10px 20px;
+    padding: 10px 10px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
   }

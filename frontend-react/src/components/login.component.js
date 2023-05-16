@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import '../styles/form.css';
 import socket from '../Socket';
 import identity from "../Identity"
+import keyboard from '../icons/keyboard.jpg';
+
 const Login = ({onLogin}) => {
         const [email, setEmail] = useState('');
         const [password, setPassword] = useState('');
@@ -37,6 +39,7 @@ const Login = ({onLogin}) => {
 
         return (
             <div className='login-content-container'>
+              <img className="form-background" src={keyboard}/>
             <form className='form'>
               <label htmlFor='email'>Email :</label>
               <input

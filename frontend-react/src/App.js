@@ -20,6 +20,7 @@ import GiveAccess from "./components/giveAccess.component"
 import EventDashboard from "./components/eventDashboard.component"
 import CreateEventForm from "./components/createEventForm.component";
 import Cart from "./components/cart.component";
+import PaymentForm from "./components/paymentForm.component";
 import './styles/global.css';
 //const socket = io.connect("http://localhost:8001");
 //const socket = "hello";
@@ -79,6 +80,7 @@ function App() {
                     <Route path="/dashboard/event" element={<EventDashboard />} />
                     <Route path="/dashboard/event/new" element={<CreateEventForm />} />
                     <Route path="/cart" element={<Cart />} />
+                    <Route path="/payment" element={<PaymentForm />} />
                     
               </Routes>
               <Footer />
